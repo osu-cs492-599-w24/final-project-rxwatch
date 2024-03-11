@@ -1,5 +1,5 @@
 # RxWatch
-A simple Android application built for CS 492 at Oregon State University with Prof. Rob Hess.
+A simple Android application built for CS 492 at Oregon State University with Prof. Rob Hess, Winter 2024.
 
 Built by:
 - Aiden Freeman
