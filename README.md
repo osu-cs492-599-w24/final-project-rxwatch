@@ -20,7 +20,7 @@ more in-depth information about the results of the search.
 All the information that is displayed in the application is be taken from the
 [OpenFDA API]([url](https://open.fda.gov/)) which is approved and updated by the FDA.
 
-The OpenFDA API does not require a regsitered accont or key. 
+The OpenFDA API does not require a registered account or key. 
 
 ## Third-party API calls
 - Drug Labeling endpoint: https://open.fda.gov/apis/drug/label/ 
