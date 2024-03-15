@@ -8,14 +8,14 @@ import androidx.navigation.fragment.findNavController
 import com.example.cs492_finalproject_rxwatch.R
 
 class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
-    private lateinit var button: Button
+    private lateinit var searchButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button = view.findViewById(R.id.btn_navigate)
+        searchButton = view.findViewById(R.id.btn_navigate)
 
-        button.setOnClickListener {
+        searchButton.setOnClickListener {
             val directions = RxSearchFragmentDirections.navigateToDrugReport()
             findNavController().navigate(directions)
         }
