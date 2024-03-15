@@ -29,5 +29,7 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
         }
 
         //TODO: Implement Search View Screen
+
+        //TODO: Display recently searched drugs
     }
 }
