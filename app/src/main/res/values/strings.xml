@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">RxWatch</string>
 
+    <string name="search_hint">Enter a drug name…</string>
+    <string name="search_button">Find Drug Reports</string>
+
     <string name="label_rx_search">RxWatch - Search</string>
     <string name="label_drug_report">RxWatch - Drug Report</string>
 </resources>
