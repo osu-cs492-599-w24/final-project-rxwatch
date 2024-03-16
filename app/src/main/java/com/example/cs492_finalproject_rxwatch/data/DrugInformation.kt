@@ -22,7 +22,7 @@ data class DrugInformation (
 @JsonClass(generateAdapter = true)
 data class DrugLabelMeta (
     @Json(name = "last_updated") val lastUpdated: String,
-    val results: LabelCounts
+    @Json(name = "results") val drugCounts: DrugCounts
 )
 
 /*
@@ -31,7 +31,7 @@ data class DrugLabelMeta (
 * and the limit (which should match the length of results).
 * */
 @JsonClass(generateAdapter = true)
-data class LabelCounts (
+data class DrugCounts (
     val limit: Int,
     val total: Int
 )
