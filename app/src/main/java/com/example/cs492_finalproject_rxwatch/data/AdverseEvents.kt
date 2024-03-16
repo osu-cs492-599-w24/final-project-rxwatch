@@ -1,10 +1,33 @@
 package com.example.cs492_finalproject_rxwatch.data
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class AdverseEvents(
-    val string: String
+data class Outcomes(
+    @Json(name = "meta") val meta: Meta,
+    @Json(name = "results") val results: List<Counts>
+)
 
-    // TODO: Implement AdverseEvents class
+@JsonClass(generateAdapter = true)
+data class Counts(
+    @Json(name = "term") val term: Int,
+    @Json(name = "count") val count: Int
+)
+
+@JsonClass(generateAdapter = true)
+data class Meta(
+    @Json(name = "disclaimer") val disclaimer: String,
+    @Json(name = "last_updated") val lastUpdated: String
+)
+
+@JsonClass(generateAdapter = true)
+data class AdverseEventInfo(
+    @Json(name = "") val test: String
+)
+
+@JsonClass(generateAdapter = true)
+data class AdverseEvents(
+    @Json(name = "meta") val meta: Meta,
+    @Json(name = "results") val results: List<AdverseEventInfo>
 )

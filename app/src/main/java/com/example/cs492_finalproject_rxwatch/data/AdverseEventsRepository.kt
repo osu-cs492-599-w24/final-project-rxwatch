@@ -17,4 +17,12 @@ class AdverseEventsRepository(
             Result.success(response.body())
         }
     }
+
+    suspend fun getReactionOutcomeCount(search: String): Result<Outcomes?> {
+        return withContext(ioDispatcher) {
+            val response = service.getReactionOutcomeCount(search)
+
+            Result.success(response.body())
+        }
+    }
 }

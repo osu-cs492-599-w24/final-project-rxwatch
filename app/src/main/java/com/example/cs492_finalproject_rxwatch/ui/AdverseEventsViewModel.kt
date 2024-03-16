@@ -14,4 +14,10 @@ class AdverseEventsViewModel: ViewModel() {
             val result = repository.getAdverseEvents(search)
         }
     }
+
+    fun loadReactionOutcomeCount(search: String) {
+        viewModelScope.launch {
+            val result = repository.getReactionOutcomeCount(search)
+        }
+    }
 }

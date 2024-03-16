@@ -17,8 +17,14 @@ interface DrugInfoService {
     @GET("event.json")
     suspend fun getAdverseEvents(
         @Query("search") search: String,
-        @Query("limit") limit: Int = 25
+        @Query("limit") limit: Int = 1
     ): Response<AdverseEvents>
+
+    @GET("event.json")
+    suspend fun getReactionOutcomeCount(
+        @Query("search") search: String,
+        @Query("count") count: String = "patient.reaction.reactionoutcome"
+    ): Response<Outcomes>
 
     companion object {
         private const val BASE_URL = "https://api.fda.gov/drug/"
