@@ -13,34 +13,11 @@ class AdverseEventsRepository(
 ) {
     private var lastDrugName: String? = null
 
-    private var cachedAdverseEvents: AdverseEvents? = null
     private var cachedOutcomeCounts: Outcomes? = null
 
     private val cacheMaxAge = 5.minutes
     private val timeSource = TimeSource.Monotonic
     private var timestamp = timeSource.markNow()
-
-    suspend fun getAdverseEvents(search: String): Result<AdverseEvents?> {
-        return if(shouldFetchAdverseEvents(search)) {
-            withContext(ioDispatcher) {
-                try{
-                    val response = service.getAdverseEvents(search)
-                    if(response.isSuccessful) {
-                        cachedAdverseEvents = response.body()
-                        timestamp = timeSource.markNow()
-                        lastDrugName = "test"
-                        Result.success(cachedAdverseEvents)
-                    } else {
-                        Result.failure(Exception(response.errorBody()?.string()))
-                    }
-                } catch(e: Exception) {
-                    Result.failure(e)
-                }
-            }
-        } else {
-            Result.success(cachedAdverseEvents!!)
-        }
-    }
 
     suspend fun getReactionOutcomeCount(search: String): Result<Outcomes?> {
         return if(shouldFetchOutcomeCount(search)) {
@@ -63,11 +40,6 @@ class AdverseEventsRepository(
             Result.success(cachedOutcomeCounts!!)
         }
     }
-
-    private fun shouldFetchAdverseEvents(search: String): Boolean =
-        cachedAdverseEvents == null
-        ||  !search.contains(lastDrugName.toString(), true)
-        || (timestamp + cacheMaxAge).hasPassedNow()
 
     private fun shouldFetchOutcomeCount(search: String): Boolean =
         cachedOutcomeCounts == null

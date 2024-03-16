@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.utils.OutcomesEnum
+import com.example.cs492_finalproject_rxwatch.utils.OutcomesSortedEnum
 
 class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
     private val viewModel: AdverseEventsViewModel by viewModels()
@@ -27,26 +28,27 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                     totalOutcomes += count.count
 
                     when(count.term) {
-                        OutcomesEnum.NOT_RECOVERED_OR_RESOLVED.num,
-                        OutcomesEnum.RECOVERING_RESOLVING.num,
-                        OutcomesEnum.RECOVERED_RESOLVED.num -> {
-                            if (outcomeCount.containsKey(0)) {
-                                outcomeCount[0] = outcomeCount[0]!! + count.count
+                        OutcomesEnum.NOT_RECOVERED_OR_RESOLVED.value,
+                        OutcomesEnum.RECOVERING_RESOLVING.value,
+                        OutcomesEnum.RECOVERED_RESOLVED.value -> {
+                            if (outcomeCount.containsKey(OutcomesSortedEnum.HOSPITILIZATION.value)) {
+                                outcomeCount[OutcomesSortedEnum.HOSPITILIZATION.value] =
+                                    outcomeCount[OutcomesSortedEnum.HOSPITILIZATION.value]!! + count.count
                             } else {
-                                outcomeCount[0] = count.count
+                                outcomeCount[OutcomesSortedEnum.HOSPITILIZATION.value] = count.count
                             }
                         }
 
-                        OutcomesEnum.RECOVERED_WITH_LONG_TERM_ISSUES.num -> {
-                            outcomeCount[1] = count.count
+                        OutcomesEnum.RECOVERED_WITH_LONG_TERM_ISSUES.value -> {
+                            outcomeCount[OutcomesSortedEnum.LONG_LASTING_EFFECTS.value] = count.count
                         }
 
-                        OutcomesEnum.FATAL.num -> {
-                            outcomeCount[2] = count.count
+                        OutcomesEnum.FATAL.value -> {
+                            outcomeCount[OutcomesSortedEnum.DEATH.value] = count.count
                         }
 
-                        OutcomesEnum.UNKNOWN.num -> {
-                            outcomeCount[3] = count.count
+                        OutcomesEnum.UNKNOWN.value -> {
+                            outcomeCount[OutcomesSortedEnum.OTHER.value] = count.count
                         }
                     }
                 }
