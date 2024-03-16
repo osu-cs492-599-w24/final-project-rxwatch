@@ -14,14 +14,15 @@ import kotlin.math.log
 class DrugInformationViewModel: ViewModel() {
     private val repository = DrugInformationRepository(DrugInfoService.create())
 
-    private val _searchResults = MutableLiveData<List<DrugInformation>?>(null)
-    val searchResults: LiveData<List<DrugInformation>?> = _searchResults
+    private val _searchResults = MutableLiveData<DrugInformation?>(null)
+    val searchResults: LiveData<DrugInformation?> = _searchResults
 
     fun loadDrugInteractions(search: String) {
         Log.d("DrugInformationViewModel", "Search query: $search")
         viewModelScope.launch {
             val result = repository.getDrugInformation(search)
             Log.d("DrugInformationViewModel", "Search Results: $result")
+            _searchResults.value = result.getOrNull()
         }
     }
 }
