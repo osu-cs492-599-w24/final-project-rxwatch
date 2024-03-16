@@ -44,9 +44,9 @@ data class LabelCounts (
 * */
 @JsonClass(generateAdapter = true)
 data class DrugInfo (
-    @Json(name = "drug_interactions") val drugInteractionsString: List<String>,
-    @Json(name = "drug_interactions_table") val drugInteractionsTable: List<String>,
-    @Json(name = "openfda") val openFDA: OpenFDA
+    @Json(name = "drug_interactions") val drugInteractionsString: List<String>?,
+    @Json(name = "drug_interactions_table") val drugInteractionsTable: List<String>?,
+    @Json(name = "openfda") val openFDA: OpenFDA?
 )
 
 /*
@@ -55,7 +55,7 @@ data class DrugInfo (
 * */
 @JsonClass(generateAdapter = true)
 data class OpenFDA (
-    @Json(name = "generic_name") val genericName : String,
-    @Json(name = "brand_name") val brandName: String,
-    @Json(name = "manufacturer_name") val manufacturerName: String
+    @Json(name = "generic_name") val genericName : List<String>?,
+    @Json(name = "brand_name") val brandName: List<String>?,
+    @Json(name = "manufacturer_name") val manufacturerName: List<String>?
 )
