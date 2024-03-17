@@ -12,6 +12,16 @@
         android:layout_marginHorizontal="8dp"
         style="?attr/materialButtonStyle"
         android:text="@string/adverse_button" />
+
+    <Button
+        android:id="@+id/btn_share_interactions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="8dp"
+        style="?attr/materialButtonStyle"
+        android:text="@string/share_button"
+        />
   
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/rv_search_results"
