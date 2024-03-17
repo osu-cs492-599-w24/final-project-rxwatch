@@ -52,33 +52,24 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
             if (searchResults != null) {
                 Log.d("DrugReportFragment", "Search Results: $searchResults")
                 Log.d("DrugReportFragment", "Search Results List of DrugInfo: ${searchResults.results}")
+
                 adapter.updateDrugInteractionsList(searchResults.results)
+
                 searchResultsListRV.visibility = View.VISIBLE
                 searchResultsListRV.scrollToPosition(0)
 
-                //format the text that will be shared via implicit intent
+                // Prep and share the list of drugs
                 shareButton.setOnClickListener {
-
-                    var interactionsString: String = ""
-                    for(drug in searchResults.results){
-                        val drugName = drug.openFDA?.genericName
-                        interactionsString += "${drugName}, "
-                    }
-
-                    val shareText = getString(R.string.share_text, exampleDrug, interactionsString.dropLast(2))
+                    val shareText = buildDrugListShareString(exampleDrug, searchResults.results)
                     val intent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(Intent.EXTRA_TEXT, shareText)
                         type = "text/plain"
                     }
                     startActivity(Intent.createChooser(intent, null))
-
                 }
-
             }
-
         }
-
     }
 
     // TODO Implement the onResume() method
@@ -92,5 +83,19 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
 
     private fun onDrugInfoItemClick(drugInfo: DrugInformation) {
         Log.d("DrugReportFragment", "Item clicked: $drugInfo")
+    }
+
+
+    /*
+    * Takes a list of DrugInfo objects from the API results and builds a string from them
+    * that can be incorporated in a ShareSheet.
+    * */
+    private fun buildDrugListShareString(searchedDrug: String, drugList: List<DrugInfo>) : String {
+        var interactionsString: String = ""
+        for(drug in drugList){
+            val drugName = drug.openFDA?.genericName
+            interactionsString += "${drugName}, "
+        }
+        return getString(R.string.share_text, searchedDrug, interactionsString.dropLast(2))
     }
 }
