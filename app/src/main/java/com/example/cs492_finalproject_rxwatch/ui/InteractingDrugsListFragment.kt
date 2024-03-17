@@ -11,12 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.fragment.findNavController
 import com.example.cs492_finalproject_rxwatch.R
-import com.example.cs492_finalproject_rxwatch.data.DrugInfo
-import com.example.cs492_finalproject_rxwatch.data.DrugInformation
 import com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay
 import com.example.cs492_finalproject_rxwatch.data.Manufacturers
 
-class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
+class InteractingDrugsListFragment : Fragment(R.layout.drug_report_fragment) {
     private val viewModel: DrugInformationViewModel by viewModels()
     private val adapter = DrugInteractionsAdapter(::onDrugInfoItemClick)
 
@@ -32,7 +30,7 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
         shareButton = view.findViewById(R.id.btn_share_interactions)
 
         adverseButton.setOnClickListener {
-            val directions = DrugReportFragmentDirections.navigateToAdverseEvents()
+            val directions = InteractingDrugsListFragmentDirections.navigateToAdverseEvents()
             findNavController().navigate(directions)
         }
 
@@ -52,8 +50,8 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
 
         viewModel.searchResults.observe(viewLifecycleOwner) { drugInformationResults ->
             if (drugInformationResults != null) {
-                Log.d("DrugReportFragment", "Search Results: $drugInformationResults")
-                Log.d("DrugReportFragment", "Search Results List of DrugInfo: ${drugInformationResults.results}")
+                Log.d("InteractingDrugsListFragment", "Search Results: $drugInformationResults")
+                Log.d("InteractingDrugsListFragment", "Search Results List of DrugInfo: ${drugInformationResults.results}")
 
                 val drugInfoList = drugInformationResults.results
 
@@ -79,16 +77,16 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
                 }
 
                 // ****** Logging logic for debugging and not necessary for app functionality ******
-                Log.d("DrugReportFragment", "drugInteractionsMap: $drugInteractionsMap")
+                Log.d("InteractingDrugsListFragment", "drugInteractionsMap: $drugInteractionsMap")
                 var totalMfrCount = 0
                 drugInteractionsMap.forEach { (_, mfrMap) ->
                     totalMfrCount += mfrMap.size
                 }
                 val genericCount = drugInteractionsMap.size
                 val avgMfrsPerGeneric = if (genericCount > 0 ) totalMfrCount.toDouble() / genericCount else 0.0
-                Log.d("DrugReportFragment", "Total Generic Names: $genericCount")
-                Log.d("DrugReportFragment", "Total Mfr Names: $totalMfrCount")
-                Log.d("DrugReportFragment", "Avg Mfr name per Generic Name: $avgMfrsPerGeneric")
+                Log.d("InteractingDrugsListFragment", "Total Generic Names: $genericCount")
+                Log.d("InteractingDrugsListFragment", "Total Mfr Names: $totalMfrCount")
+                Log.d("InteractingDrugsListFragment", "Avg Mfr name per Generic Name: $avgMfrsPerGeneric")
                 // *********************************************************************************
 
                 // Convert the nested map into nested data classes
@@ -132,7 +130,7 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
 //    }
 
     private fun onDrugInfoItemClick(drugInfo: DrugInteractionsDisplay) {
-        Log.d("DrugReportFragment", "Item clicked: $drugInfo")
+        Log.d("InteractingDrugsListFragment", "Item clicked: $drugInfo")
     }
 
     /*
