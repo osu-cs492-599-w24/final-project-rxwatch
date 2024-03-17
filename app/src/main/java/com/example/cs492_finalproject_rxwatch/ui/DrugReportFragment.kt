@@ -1,5 +1,6 @@
 package com.example.cs492_finalproject_rxwatch.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,17 +21,19 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
     private lateinit var searchResultsListRV: RecyclerView
 
     private lateinit var adverseButton: Button
+    private lateinit var shareButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adverseButton = view.findViewById(R.id.btn_navigate_to_adverse)
+        shareButton = view.findViewById(R.id.btn_share_interactions)
 
         adverseButton.setOnClickListener {
             val directions = DrugReportFragmentDirections.navigateToAdverseEvents()
             findNavController().navigate(directions)
         }
-      
+
         /*
         * The API documentation says to uses `+AND+` to search multiple fields
         * However, Retrofit appears to be URL encoding the `+` signs, so it gets double encoded.
@@ -52,9 +55,30 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
                 adapter.updateDrugInteractionsList(searchResults.results)
                 searchResultsListRV.visibility = View.VISIBLE
                 searchResultsListRV.scrollToPosition(0)
+
+                //format the text that will be shared via implicit intent
+                shareButton.setOnClickListener {
+
+                    var interactionsString: String = ""
+                    for(drug in searchResults.results){
+                        val drugName = drug.openFDA?.genericName
+                        interactionsString += "${drugName}, "
+                    }
+
+                    val shareText = getString(R.string.share_text, exampleDrug, interactionsString.dropLast(2))
+                    val intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, shareText)
+                        type = "text/plain"
+                    }
+                    startActivity(Intent.createChooser(intent, null))
+
+                }
+
             }
 
         }
+
     }
 
     // TODO Implement the onResume() method
