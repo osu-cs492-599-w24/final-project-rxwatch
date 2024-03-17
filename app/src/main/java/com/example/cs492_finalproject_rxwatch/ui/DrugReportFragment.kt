@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModelss
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.fragment.findNavController
@@ -18,10 +18,6 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
     private val adapter = DrugInteractionsAdapter(::onDrugInfoItemClick)
 
     private lateinit var searchResultsListRV: RecyclerView
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
 
     private lateinit var adverseButton: Button
 
@@ -34,10 +30,6 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
             val directions = DrugReportFragmentDirections.navigateToAdverseEvents()
             findNavController().navigate(directions)
         }
-
-        //TODO: Implement Drug Report Screen
-        Log.d("DrugReportFragment", "View: $view")
-        val exampleDrug = "hydrocodone"
       
         /*
         * The API documentation says to uses `+AND+` to search multiple fields
@@ -54,7 +46,6 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
         searchResultsListRV.adapter = adapter
 
         viewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
-//            Log.d("DrugReportFragment", "Search Results: $searchResults")
             if (searchResults != null) {
                 Log.d("DrugReportFragment", "Search Results: $searchResults")
                 Log.d("DrugReportFragment", "Search Results List of DrugInfo: ${searchResults.results}")
@@ -66,6 +57,7 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
         }
     }
 
+    // TODO Implement the onResume() method
 //    override fun onResume() {
 //        super.onResume()
 //
