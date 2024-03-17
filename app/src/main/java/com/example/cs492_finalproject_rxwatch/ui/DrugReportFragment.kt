@@ -48,19 +48,55 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
         searchResultsListRV.setHasFixedSize(true)
         searchResultsListRV.adapter = adapter
 
-        viewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
-            if (searchResults != null) {
-                Log.d("DrugReportFragment", "Search Results: $searchResults")
-                Log.d("DrugReportFragment", "Search Results List of DrugInfo: ${searchResults.results}")
+        viewModel.searchResults.observe(viewLifecycleOwner) { drugInformationResults ->
+            if (drugInformationResults != null) {
+                Log.d("DrugReportFragment", "Search Results: $drugInformationResults")
+                Log.d("DrugReportFragment", "Search Results List of DrugInfo: ${drugInformationResults.results}")
 
-                adapter.updateDrugInteractionsList(searchResults.results)
+                val drugInfoList = drugInformationResults.results
+
+                /*
+                * Build a map of the manufacturer (mfr) drug names to the drug interactions
+                * and nest it within a map of the generic drug names.
+                * This helps condense the search results, since many manufacturers make the same drug.
+                * */
+                val drugInteractionsMap = mutableMapOf<String, MutableMap<String, String>>()
+
+                drugInfoList.forEach { drugInfo ->
+                    drugInfo.openFDA?.genericName?.forEach{ genericName ->
+                        val mfrToInteractionsMap = drugInteractionsMap.getOrPut(genericName) {
+                            mutableMapOf()
+                        }
+                        drugInfo.openFDA.manufacturerName?.forEach { mfrName ->
+                            val interactionsString = drugInfo.drugInteractionsString?.joinToString(
+                                separator = "; ")
+                                ?: "No interactions found"
+                            mfrToInteractionsMap[mfrName] = interactionsString
+                        }
+                    }
+                }
+
+                // ****** Logging logic for debugging and not necessary for app functionality ******
+                Log.d("DrugReportFragment", "drugInteractionsMap: $drugInteractionsMap")
+                var totalMfrCount = 0
+                drugInteractionsMap.forEach { (_, mfrMap) ->
+                    totalMfrCount += mfrMap.size
+                }
+                val genericCount = drugInteractionsMap.size
+                val avgMfrsPerGeneric = if (genericCount > 0 ) totalMfrCount.toDouble() / genericCount else 0.0
+                Log.d("DrugReportFragment", "Total Generic Names: $genericCount")
+                Log.d("DrugReportFragment", "Total Mfr Names: $totalMfrCount")
+                Log.d("DrugReportFragment", "Avg Mfr name per Generic Name: $avgMfrsPerGeneric")
+                // *********************************************************************************
+
+                adapter.updateDrugInteractionsList(drugInfoList)
 
                 searchResultsListRV.visibility = View.VISIBLE
                 searchResultsListRV.scrollToPosition(0)
 
                 // Prep and share the list of drugs
                 shareButton.setOnClickListener {
-                    val shareText = buildDrugListShareString(exampleDrug, searchResults.results)
+                    val shareText = buildDrugListShareString(exampleDrug, drugInfoList)
                     val intent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(Intent.EXTRA_TEXT, shareText)
