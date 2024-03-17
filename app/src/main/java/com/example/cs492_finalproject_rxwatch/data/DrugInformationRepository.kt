@@ -15,7 +15,7 @@ class DrugInformationRepository(
         Log.d("DrugInformationRepository", "Search Query: $search")
         return withContext(ioDispatcher) {
             val response = service.getDrugInformation(search)
-
+            Log.d("DrugInformationRepository", "Response: $response")
             Result.success(response.body())
         }
     }

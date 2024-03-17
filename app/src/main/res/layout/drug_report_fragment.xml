@@ -12,5 +12,10 @@
         android:layout_marginHorizontal="8dp"
         style="?attr/materialButtonStyle"
         android:text="@string/adverse_button" />
+  
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/rv_search_results"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
 
 </LinearLayout>
