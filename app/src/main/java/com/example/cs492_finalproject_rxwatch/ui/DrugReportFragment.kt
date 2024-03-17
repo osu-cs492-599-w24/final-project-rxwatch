@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.DrugInfo
 import com.example.cs492_finalproject_rxwatch.data.DrugInformation
+import com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay
+import com.example.cs492_finalproject_rxwatch.data.Manufacturers
 
 class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
     private val viewModel: DrugInformationViewModel by viewModels()
@@ -89,7 +91,19 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
                 Log.d("DrugReportFragment", "Avg Mfr name per Generic Name: $avgMfrsPerGeneric")
                 // *********************************************************************************
 
-                adapter.updateDrugInteractionsList(drugInfoList)
+                // Convert the nested map into nested data classes
+                // so the adapter can more easily work with it
+                val displayList = drugInteractionsMap.map { (genericName, mfrMap) ->
+                    DrugInteractionsDisplay(
+                        genericName = genericName,
+                        manufacturerName = mfrMap.map { (mfrName, interactions) ->
+                            Manufacturers(mfrName, interactions)
+                        }
+                    )
+                }
+
+                // Send the new nested data classes to the adapter
+                adapter.updateDrugInteractionsList(displayList)
 
                 searchResultsListRV.visibility = View.VISIBLE
                 searchResultsListRV.scrollToPosition(0)
@@ -117,7 +131,7 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
 //        viewModel.loadDrugInteractions(exampleQuery)
 //    }
 
-    private fun onDrugInfoItemClick(drugInfo: DrugInformation) {
+    private fun onDrugInfoItemClick(drugInfo: DrugInteractionsDisplay) {
         Log.d("DrugReportFragment", "Item clicked: $drugInfo")
     }
 
