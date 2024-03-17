@@ -8,10 +8,3 @@ enum class OutcomesEnum(val value: Int) {
     FATAL(5),
     UNKNOWN(6)
 }
-
-enum class OutcomesSortedEnum(val value: Int) {
-    HOSPITILIZATION(0),
-    LONG_LASTING_EFFECTS(1),
-    DEATH(2),
-    OTHER(3)
-}

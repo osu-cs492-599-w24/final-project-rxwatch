@@ -15,12 +15,6 @@ interface DrugInfoService {
     ): Response<DrugInformation>
 
     @GET("event.json")
-    suspend fun getAdverseEvents(
-        @Query("search") search: String,
-        @Query("limit") limit: Int = 1
-    ): Response<AdverseEvents>
-
-    @GET("event.json")
     suspend fun getReactionOutcomeCount(
         @Query("search") search: String,
         @Query("count") count: String = "patient.reaction.reactionoutcome"
