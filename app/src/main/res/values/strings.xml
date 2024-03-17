@@ -3,6 +3,7 @@
 
     <string name="search_hint">Enter a drug name…</string>
     <string name="search_button">Find Interacting Drugs</string>
+    <string name="search_recent">Recently Searched Drugs:</string>
 
     <string name="adverse_button">View Adverse Events</string>
     <string name="share_button">Share Interactions</string>
