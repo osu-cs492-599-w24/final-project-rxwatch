@@ -135,7 +135,6 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
         Log.d("DrugReportFragment", "Item clicked: $drugInfo")
     }
 
-
     /*
     * Takes a list of DrugInfo objects from the API results and builds a string from them
     * that can be incorporated in a ShareSheet.
