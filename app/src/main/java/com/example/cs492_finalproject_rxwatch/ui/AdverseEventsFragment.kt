@@ -26,6 +26,12 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /*
+         * Whenever a API call is made through the view model that doesn't
+         * used cache data the outcomeCounts will be changed calling this
+         * listener. This function maintains the data set for our pie chart
+         * and sets it up with the values we have stored.
+         */
         viewModel.outcomeCounts.observe(viewLifecycleOwner) { outcomes ->
             if (outcomes != null) {
                 Log.d("AdverseEventsFragment", outcomes.toString())
@@ -42,6 +48,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                 outcomes.results.forEach { count ->
                     totalOutcomes += count.count
 
+                    //Map the 6 values into the only 4 that we want using enum
                     when(count.term) {
                         OutcomesEnum.NOT_RECOVERED_OR_RESOLVED.value,
                         OutcomesEnum.RECOVERING_RESOLVING.value,
@@ -68,23 +75,30 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                     }
                 }
 
+                //add colors for pie chart
                 pieColors.add(Color.parseColor("#5e81ac"));
                 pieColors.add(Color.parseColor("#a3be8c"));
                 pieColors.add(Color.parseColor("#b48ead"));
                 pieColors.add(Color.parseColor("#ebcb8b"));
 
+                //populating pie chart with data with data we just stored in the
+                // outcomeCount map
                 outcomeCount.keys.forEach { key ->
                     pieEntries.add(0, PieEntry(outcomeCount[key]?.toFloat() ?: 0f, key))
                 }
 
+                //set data and colors
                 pieDataset = PieDataSet(pieEntries, label)
                 pieDataset.colors = pieColors
 
+                //create pie data with our data set and set
+                //other values
                 val pieData = PieData(pieDataset)
                 pieData.setDrawValues(true)
                 pieData.setValueTextSize(18f)
                 pieData.setValueFormatter(PercentFormatter())
 
+                //initialization and customization for pie chart
                 pieChart.data = pieData
                 pieChart.setUsePercentValues(true)
                 pieChart.isRotationEnabled = true

@@ -19,6 +19,12 @@ class AdverseEventsRepository(
     private val timeSource = TimeSource.Monotonic
     private var timestamp = timeSource.markNow()
 
+    /*
+     * Handles the API call for getting the outcome counts for a drug. If
+     * we already have grabbed an API call for the drug it will be cached
+     * and will be used until info for a new drug is needed or it's been
+     * cached for more than 5 minutes
+     */
     suspend fun getReactionOutcomeCount(search: String): Result<Outcomes?> {
         return if(shouldFetchOutcomeCount(search)) {
             withContext(ioDispatcher) {
@@ -41,6 +47,9 @@ class AdverseEventsRepository(
         }
     }
 
+    /*
+     * Helper function to determine whether to use cached value or not.
+     */
     private fun shouldFetchOutcomeCount(search: String): Boolean =
         cachedOutcomeCounts == null
                 || !search.contains(lastDrugName.toString(), true)
