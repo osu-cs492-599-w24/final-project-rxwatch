@@ -4,33 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <FrameLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_search_results"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-<!--        <TextView-->
-<!--            android:id="@+id/tv_search_error"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:padding="16dp"-->
-<!--            android:textAppearance="?attr/textAppearanceBody1"-->
-<!--            android:textColor="?attr/colorError"-->
-<!--            android:visibility="invisible" />-->
-
-<!--        <com.google.android.material.progressindicator.CircularProgressIndicator-->
-<!--            android:id="@+id/loading_indicator"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:indeterminate="true"-->
-<!--            android:layout_marginTop="32dp"-->
-<!--            android:layout_gravity="top|center_horizontal"-->
-<!--            android:visibility="invisible" />-->
-
-<!--    </FrameLayout>-->
+    <Button
+        android:id="@+id/btn_navigate_to_adverse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="8dp"
+        style="?attr/materialButtonStyle"
+        android:text="@string/adverse_button" />
+  
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/rv_search_results"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
 
 </LinearLayout>

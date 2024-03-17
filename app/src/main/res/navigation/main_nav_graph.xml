@@ -15,12 +15,22 @@
     </fragment>
 
     <fragment
+        android:id="@+id/adverse_events"
+        android:name="com.example.cs492_finalproject_rxwatch.ui.AdverseEventsFragment"
+        android:label="@string/label_adverse_events" >
+    </fragment>
+
+    <fragment
         android:id="@+id/drug_report"
         android:name="com.example.cs492_finalproject_rxwatch.ui.DrugReportFragment"
         android:label="@string/label_drug_report" >
         <action
             android:id="@+id/navigate_to_rx_search"
             app:destination="@id/rx_search"/>
+
+        <action
+            android:id="@+id/navigate_to_adverse_events"
+            app:destination="@id/adverse_events"/>
     </fragment>
 
 </navigation>
