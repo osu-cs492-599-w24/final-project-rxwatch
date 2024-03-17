@@ -36,9 +36,11 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
         searchResultsListRV.adapter = adapter
 
         viewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
-            Log.d("DrugReportFragment", "Search Results: $searchResults")
+//            Log.d("DrugReportFragment", "Search Results: $searchResults")
             if (searchResults != null) {
-//                adapter.updateDrugInteractionsList(searchResults)
+                Log.d("DrugReportFragment", "Search Results: $searchResults")
+                Log.d("DrugReportFragment", "Search Results List of DrugInfo: ${searchResults.results}")
+                adapter.updateDrugInteractionsList(searchResults.results)
                 searchResultsListRV.visibility = View.VISIBLE
                 searchResultsListRV.scrollToPosition(0)
             }

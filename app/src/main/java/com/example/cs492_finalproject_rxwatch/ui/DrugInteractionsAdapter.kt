@@ -11,12 +11,12 @@ import com.example.cs492_finalproject_rxwatch.data.DrugInfo
 import com.example.cs492_finalproject_rxwatch.data.DrugInformation
 
 class DrugInteractionsAdapter(
-    private val onDrugInfoItemClick: (DrugInformation) -> Unit
+    private val onDrugInfoItemClick: (DrugInformation) -> Unit // This DrugInformation will most likely have to change
 )
     : RecyclerView.Adapter<DrugInteractionsAdapter.DrugInteractionsViewHolder>() {
-        private var drugInteractionsList = listOf<DrugInformation>()
+        private var drugInteractionsList = listOf<DrugInfo>()
 
-    fun updateDrugInteractionsList(newDrugInteractionsList: List<DrugInformation>?) {
+    fun updateDrugInteractionsList(newDrugInteractionsList: List<DrugInfo>?) {
         notifyItemRangeRemoved(0, drugInteractionsList.size)
         drugInteractionsList = newDrugInteractionsList ?: listOf()
         Log.d("DrugInteractionsAdapter", "Updated Drug Interactions List: $drugInteractionsList")
@@ -46,23 +46,23 @@ class DrugInteractionsAdapter(
         onClick: (DrugInformation) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
         private val nameTV: TextView = itemView.findViewById(R.id.tv_name)
-        private val interactionsTV: TextView = itemView.findViewById(R.id.tv_interactions)
-        private var currentDrugInfo: DrugInformation? = null
+//        private val interactionsTV: TextView = itemView.findViewById(R.id.tv_interactions)
+        private var currentDrugInfo: DrugInfo? = null
 
         init {
             itemView.setOnClickListener {
-                currentDrugInfo?.let(onClick)
+//                currentDrugInfo?.let(onClick)     // TODO
             }
         }
 
-        fun bind(drugInfo: DrugInformation) {
+        fun bind(drugInfo: DrugInfo) {
             currentDrugInfo = drugInfo
 
-            val drugName = drugInfo.results[0].openFDA?.genericName
+            val drugName = drugInfo.openFDA?.genericName
             nameTV.text = drugName.toString()
 
-            val drugInteractions = drugInfo.results[0].drugInteractionsString
-            interactionsTV.text = drugInteractions.toString()
+//            val drugInteractions = drugInfo.drugInteractionsString
+//            interactionsTV.text = drugInteractions.toString()
         }
     }
 }
