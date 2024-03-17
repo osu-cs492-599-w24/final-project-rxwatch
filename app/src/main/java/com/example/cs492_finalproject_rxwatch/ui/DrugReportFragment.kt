@@ -110,7 +110,7 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
 
                 // Prep and share the list of drugs
                 shareButton.setOnClickListener {
-                    val shareText = buildDrugListShareString(exampleDrug, drugInfoList)
+                    val shareText = buildDrugListShareString(exampleDrug, displayList)
                     val intent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(Intent.EXTRA_TEXT, shareText)
@@ -140,11 +140,11 @@ class DrugReportFragment : Fragment(R.layout.drug_report_fragment) {
     * Takes a list of DrugInfo objects from the API results and builds a string from them
     * that can be incorporated in a ShareSheet.
     * */
-    private fun buildDrugListShareString(searchedDrug: String, drugList: List<DrugInfo>) : String {
+    private fun buildDrugListShareString(searchedDrug: String, drugList: List<DrugInteractionsDisplay>) : String {
         var interactionsString: String = ""
         for(drug in drugList){
-            val drugName = drug.openFDA?.genericName
-            interactionsString += "${drugName}, "
+            val drugName = drug.genericName
+            interactionsString += "\n${drugName}; "
         }
         return getString(R.string.share_text, searchedDrug, interactionsString.dropLast(2))
     }

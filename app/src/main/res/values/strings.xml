@@ -8,7 +8,7 @@
     <string name="share_button">Share Interactions</string>
     <string name="adverse_headline">Outcomes of Drug Adverse Events</string>
 
-    <string name="share_text">DRUG: %1$s,\n\nPOSSIBLE INTERACTIONS: %2$s</string>
+    <string name="share_text">DRUG: %1$s\n\nPOSSIBLE INTERACTIONS: %2$s</string>
 
     <string name="label_rx_search">RxWatch - Search</string>
     <string name="label_drug_report">RxWatch - Drug Report</string>
