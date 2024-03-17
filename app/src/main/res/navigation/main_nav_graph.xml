@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/drug_report"
-        android:name="com.example.cs492_finalproject_rxwatch.ui.DrugReportFragment"
+        android:name="com.example.cs492_finalproject_rxwatch.ui.InteractingDrugsListFragment"
         android:label="@string/label_drug_report" >
         <action
             android:id="@+id/navigate_to_rx_search"

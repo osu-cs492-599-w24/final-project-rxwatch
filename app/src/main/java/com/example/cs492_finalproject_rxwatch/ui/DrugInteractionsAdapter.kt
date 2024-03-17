@@ -7,23 +7,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs492_finalproject_rxwatch.R
-import com.example.cs492_finalproject_rxwatch.data.DrugInfo
-import com.example.cs492_finalproject_rxwatch.data.DrugInformation
+import com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay
 
 class DrugInteractionsAdapter(
-    private val onDrugInfoItemClick: (DrugInformation) -> Unit // This DrugInformation will most likely have to change
+    private val onDrugInfoItemClick: (DrugInteractionsDisplay) -> Unit // This DrugInformation will most likely have to change
 )
     : RecyclerView.Adapter<DrugInteractionsAdapter.DrugInteractionsViewHolder>() {
-        private var drugInteractionsList = listOf<DrugInfo>()
+    private var interactingDrugsList = listOf<DrugInteractionsDisplay>()
 
-    fun updateDrugInteractionsList(newDrugInteractionsList: List<DrugInfo>?) {
-        notifyItemRangeRemoved(0, drugInteractionsList.size)
-        drugInteractionsList = newDrugInteractionsList ?: listOf()
-        Log.d("DrugInteractionsAdapter", "Updated Drug Interactions List: $drugInteractionsList")
-        notifyItemRangeInserted(0, drugInteractionsList.size)
+    fun updateDrugInteractionsList(newInteractingDrugsList: List<DrugInteractionsDisplay>?) {
+        notifyItemRangeRemoved(0, interactingDrugsList.size)
+        interactingDrugsList = newInteractingDrugsList ?: listOf()
+        Log.d("DrugInteractionsAdapter", "Updated Drug Interactions List: $interactingDrugsList")
+        notifyItemRangeInserted(0, interactingDrugsList.size)
     }
 
-    override fun getItemCount() = drugInteractionsList.size
+    override fun getItemCount() = interactingDrugsList.size
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -38,16 +37,15 @@ class DrugInteractionsAdapter(
         holder: DrugInteractionsViewHolder,
         position: Int
     ) {
-        holder.bind(drugInteractionsList[position])
+        holder.bind(interactingDrugsList[position])
     }
 
     class DrugInteractionsViewHolder(
         itemView: View,
-        onClick: (DrugInformation) -> Unit
+        onClick: (DrugInteractionsDisplay) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
         private val nameTV: TextView = itemView.findViewById(R.id.tv_name)
-//        private val interactionsTV: TextView = itemView.findViewById(R.id.tv_interactions)
-        private var currentDrugInfo: DrugInfo? = null
+        private var currentDrugInfo: DrugInteractionsDisplay? = null
 
         init {
             itemView.setOnClickListener {
@@ -55,14 +53,11 @@ class DrugInteractionsAdapter(
             }
         }
 
-        fun bind(drugInfo: DrugInfo) {
-            currentDrugInfo = drugInfo
+        fun bind(drugDisplay: DrugInteractionsDisplay) {
+            currentDrugInfo = drugDisplay
 
-            val drugName = drugInfo.openFDA?.genericName
-            nameTV.text = drugName.toString()
-
-//            val drugInteractions = drugInfo.drugInteractionsString
-//            interactionsTV.text = drugInteractions.toString()
+            val drugName = drugDisplay.genericName
+            nameTV.text = drugName
         }
     }
 }
