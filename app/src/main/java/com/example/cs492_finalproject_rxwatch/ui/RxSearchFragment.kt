@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrug
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
     private lateinit var searchButton: Button
@@ -36,15 +37,20 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
             val directions = RxSearchFragmentDirections.navigateToDrugReport()
             val query = searchBox.text.toString()
 
-            searchedDrugsViewModel.addSearchedDrug(SearchedDrug(
-                query,
-                System.currentTimeMillis()
-            ))
-
             if (!TextUtils.isEmpty(query)) {
                 Log.d("RxSearchFragment", "Search query: $query")
+                searchedDrugsViewModel.addSearchedDrug(SearchedDrug(
+                    query,
+                    System.currentTimeMillis()
+                ))
+                findNavController().navigate(directions)
+            } else {
+                Snackbar.make(
+                    view,
+                    "Please enter or select a drug to search.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
-            findNavController().navigate(directions)
         }
 
         searchedDrugList.layoutManager = LinearLayoutManager(requireContext())
