@@ -127,6 +127,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
             }
         }
 
+        //Set up an observer for the loading status of the API query
         viewModel.loading.observe(viewLifecycleOwner) { loading ->
             if (loading) {
                 adverseEventsView.visibility = View.INVISIBLE
