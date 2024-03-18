@@ -13,6 +13,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 
 class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
@@ -23,8 +24,14 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
     private lateinit var pieChart: PieChart
 
+    private lateinit var loadingIndicator: CircularProgressIndicator
+    private lateinit var adverseEventsView: View
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adverseEventsView = view.findViewById(R.id.constraint_layout_adverse)
+        loadingIndicator = view.findViewById(R.id.loading_indicator)
 
         /*
          * Whenever a API call is made through the view model that doesn't
@@ -35,6 +42,8 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
         viewModel.outcomeCounts.observe(viewLifecycleOwner) { outcomes ->
             if (outcomes != null) {
                 Log.d("AdverseEventsFragment", outcomes.toString())
+
+                adverseEventsView.visibility = View.VISIBLE
 
                 pieChart = view.findViewById(R.id.pieChart_view)
 
@@ -117,6 +126,17 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                 error.printStackTrace()
             }
         }
+
+        viewModel.loading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                adverseEventsView.visibility = View.INVISIBLE
+                loadingIndicator.visibility = View.VISIBLE
+            }
+            else{
+                loadingIndicator.visibility = View.INVISIBLE
+            }
+        }
+
     }
 
     override fun onResume() {

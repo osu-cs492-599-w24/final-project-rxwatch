@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay
 import com.example.cs492_finalproject_rxwatch.data.Manufacturers
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 class InteractingDrugsListFragment : Fragment(R.layout.drug_report_fragment) {
     private val viewModel: DrugInformationViewModel by viewModels()
@@ -23,11 +24,16 @@ class InteractingDrugsListFragment : Fragment(R.layout.drug_report_fragment) {
     private lateinit var adverseButton: Button
     private lateinit var shareButton: Button
 
+    private lateinit var loadingIndicator: CircularProgressIndicator
+    private lateinit var drugsInfoView: View
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adverseButton = view.findViewById(R.id.btn_navigate_to_adverse)
         shareButton = view.findViewById(R.id.btn_share_interactions)
+        loadingIndicator = view.findViewById(R.id.loading_indicator)
+        drugsInfoView = view.findViewById(R.id.drugs_info)
 
         adverseButton.setOnClickListener {
             val directions = InteractingDrugsListFragmentDirections.navigateToAdverseEvents()
@@ -50,6 +56,9 @@ class InteractingDrugsListFragment : Fragment(R.layout.drug_report_fragment) {
 
         viewModel.searchResults.observe(viewLifecycleOwner) { drugInformationResults ->
             if (drugInformationResults != null) {
+
+                drugsInfoView.visibility = View.VISIBLE
+
                 Log.d("InteractingDrugsListFragment", "Search Results: $drugInformationResults")
                 Log.d("InteractingDrugsListFragment", "Search Results List of DrugInfo: ${drugInformationResults.results}")
 
@@ -118,6 +127,17 @@ class InteractingDrugsListFragment : Fragment(R.layout.drug_report_fragment) {
                 }
             }
         }
+
+        viewModel.loading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                drugsInfoView.visibility = View.INVISIBLE
+                loadingIndicator.visibility = View.VISIBLE
+            }
+            else {
+                loadingIndicator.visibility = View.INVISIBLE
+            }
+        }
+
     }
 
     // TODO Implement the onResume() method

@@ -17,10 +17,15 @@ class DrugInformationViewModel: ViewModel() {
     private val _searchResults = MutableLiveData<DrugInformation?>(null)
     val searchResults: LiveData<DrugInformation?> = _searchResults
 
+    private val _loading = MutableLiveData<Boolean>(false)
+    val loading: LiveData<Boolean> = _loading
+
     fun loadDrugInteractions(search: String) {
         Log.d("DrugInformationViewModel", "Search query: $search")
         viewModelScope.launch {
+            _loading.value = true
             val result = repository.getDrugInformation(search)
+            _loading.value = false
             Log.d("DrugInformationViewModel", "Search Results: $result")
             _searchResults.value = result.getOrNull()
         }
