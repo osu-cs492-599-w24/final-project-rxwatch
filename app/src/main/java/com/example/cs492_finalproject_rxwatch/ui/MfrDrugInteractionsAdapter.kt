@@ -11,7 +11,7 @@ import com.example.cs492_finalproject_rxwatch.data.Manufacturer
 
 class MfrDrugInteractionsAdapter(
     var context: Context,
-    private var manufacturers: MutableList<Manufacturer>
+    private var manufacturers: List<Manufacturer>
 ) : BaseExpandableListAdapter() {
     override fun getGroupCount(): Int {
         return manufacturers.size
