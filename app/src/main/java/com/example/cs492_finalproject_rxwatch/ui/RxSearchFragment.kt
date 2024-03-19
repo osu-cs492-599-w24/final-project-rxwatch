@@ -100,4 +100,9 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
         val directions = RxSearchFragmentDirections.navigateToDrugReport()
         findNavController().navigate(directions)
     }
+
+    override fun onResume() {
+        super.onResume()
+        searchBox.text.clear()
+    }
 }
