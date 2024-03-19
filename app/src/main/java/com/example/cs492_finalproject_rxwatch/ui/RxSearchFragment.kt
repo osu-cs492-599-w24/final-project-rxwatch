@@ -58,7 +58,7 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
         searchedDrugList.layoutManager = LinearLayoutManager(requireContext())
         searchedDrugList.setHasFixedSize(true)
 
-        val adapter = SearchedDrugsAdapter()
+        val adapter = SearchedDrugsAdapter(::onRecentlySearchedDrugClicked)
         searchedDrugList.adapter = adapter
 
         searchedDrugsViewModel.searchedDrugs.observe(viewLifecycleOwner) { drugs ->
@@ -87,5 +87,9 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
             }
 
         ItemTouchHelper(itemTouchCallBack).attachToRecyclerView(searchedDrugList)
+    }
+
+    private fun onRecentlySearchedDrugClicked(drug: SearchedDrug) {
+        Log.d("RxSearchFragment", "Clicked on drug: $drug")
     }
 }
