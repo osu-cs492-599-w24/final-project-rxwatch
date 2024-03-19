@@ -91,5 +91,13 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
 
     private fun onRecentlySearchedDrugClicked(drug: SearchedDrug) {
         Log.d("RxSearchFragment", "Clicked on drug: $drug")
+
+        searchedDrugsViewModel.addSearchedDrug(SearchedDrug(
+            drug.drugName,
+            System.currentTimeMillis()
+        ))
+
+        val directions = RxSearchFragmentDirections.navigateToDrugReport()
+        findNavController().navigate(directions)
     }
 }
