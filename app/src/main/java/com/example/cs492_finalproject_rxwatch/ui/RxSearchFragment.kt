@@ -18,6 +18,7 @@ import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrug
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewModel
 import com.google.android.material.snackbar.Snackbar
+import java.util.Locale
 
 class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
     private lateinit var searchButton: Button
@@ -35,7 +36,8 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
 
         searchButton.setOnClickListener {
             val directions = RxSearchFragmentDirections.navigateToDrugReport()
-            val query = searchBox.text.toString()
+            val query = searchBox.text.toString().lowercase(Locale.ROOT)
+            Log.d("RxSearchFragment", "Query from text entry: $query")
 
             if (!TextUtils.isEmpty(query)) {
                 Log.d("RxSearchFragment", "Search query: $query")
