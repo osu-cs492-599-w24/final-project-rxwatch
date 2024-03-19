@@ -44,6 +44,9 @@
         <argument
             android:name="druginfo"
             app:argType="com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay" />
+        <argument
+            android:name="searched_drug_name"
+            app:argType="string" />
 
     </fragment>
 

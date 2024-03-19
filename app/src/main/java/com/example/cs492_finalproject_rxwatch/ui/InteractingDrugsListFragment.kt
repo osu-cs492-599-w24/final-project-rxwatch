@@ -29,6 +29,8 @@ class InteractingDrugsListFragment : Fragment(R.layout.interactings_drugs_list_f
     private lateinit var loadingIndicator: CircularProgressIndicator
     private lateinit var drugsInfoView: View
 
+    private lateinit var searchedDrugName: String
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -48,10 +50,10 @@ class InteractingDrugsListFragment : Fragment(R.layout.interactings_drugs_list_f
         * Replacing the `+` signs with a space ` ` appears to fix the issue.
         * */
         searchedDrugsViewModel.mostRecentSearchedDrug.observe(viewLifecycleOwner) { drug ->
-            val searchedDrug = drug[0].drugName
-            Log.d("InteractingDrugsListFragment", "Searched drug outside observe: $searchedDrug")
+            searchedDrugName = drug[0].drugName
+            Log.d("InteractingDrugsListFragment", "Searched drug outside observe: $searchedDrugName")
 
-            val query = "drug_interactions:$searchedDrug AND _exists_:openfda.generic_name"
+            val query = "drug_interactions:$searchedDrugName AND _exists_:openfda.generic_name"
             Log.d("InteractingDrugsListFragment", "Query: $query")
 
             viewModel.loadDrugInteractions(query)
@@ -126,7 +128,7 @@ class InteractingDrugsListFragment : Fragment(R.layout.interactings_drugs_list_f
 
                     // Prep and share the list of drugs
                     shareButton.setOnClickListener {
-                        val shareText = buildDrugListShareString(searchedDrug, displayList)
+                        val shareText = buildDrugListShareString(searchedDrugName, displayList)
                         val intent = Intent().apply {
                             action = Intent.ACTION_SEND
                             putExtra(Intent.EXTRA_TEXT, shareText)
@@ -155,7 +157,7 @@ class InteractingDrugsListFragment : Fragment(R.layout.interactings_drugs_list_f
         Log.d("InteractingDrugsListFragment", "Item clicked: $drugInfo")
         Log.d("InteractingDrugsListFragment", "Clicked Drug Generic Name: ${drugInfo.genericName}")
         Log.d("InteractingDrugsListFragment", "Clicked Drug Manufacturer: ${drugInfo.manufacturers}")
-        val directions = InteractingDrugsListFragmentDirections.navigateToManufacturersList(drugInfo)
+        val directions = InteractingDrugsListFragmentDirections.navigateToManufacturersList(drugInfo, searchedDrugName)
         findNavController().navigate(directions)
     }
 
