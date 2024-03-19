@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrug
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewModel
+import com.google.android.material.snackbar.Snackbar
+import java.util.Locale
 
 class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
     private lateinit var searchButton: Button
@@ -34,23 +36,29 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
 
         searchButton.setOnClickListener {
             val directions = RxSearchFragmentDirections.navigateToDrugReport()
-            val query = searchBox.text.toString()
-
-            searchedDrugsViewModel.addSearchedDrug(SearchedDrug(
-                query,
-                System.currentTimeMillis()
-            ))
+            val query = searchBox.text.toString().lowercase(Locale.ROOT)
+            Log.d("RxSearchFragment", "Query from text entry: $query")
 
             if (!TextUtils.isEmpty(query)) {
                 Log.d("RxSearchFragment", "Search query: $query")
+                searchedDrugsViewModel.addSearchedDrug(SearchedDrug(
+                    query,
+                    System.currentTimeMillis()
+                ))
+                findNavController().navigate(directions)
+            } else {
+                Snackbar.make(
+                    view,
+                    "Please enter or select a drug to search.",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
-            findNavController().navigate(directions)
         }
 
         searchedDrugList.layoutManager = LinearLayoutManager(requireContext())
         searchedDrugList.setHasFixedSize(true)
 
-        val adapter = SearchedDrugsAdapter()
+        val adapter = SearchedDrugsAdapter(::onRecentlySearchedDrugClicked)
         searchedDrugList.adapter = adapter
 
         searchedDrugsViewModel.searchedDrugs.observe(viewLifecycleOwner) { drugs ->
@@ -79,7 +87,22 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
             }
 
         ItemTouchHelper(itemTouchCallBack).attachToRecyclerView(searchedDrugList)
+    }
 
-        //TODO: Implement Search View Screen
+    private fun onRecentlySearchedDrugClicked(drug: SearchedDrug) {
+        Log.d("RxSearchFragment", "Clicked on drug: $drug")
+
+        searchedDrugsViewModel.addSearchedDrug(SearchedDrug(
+            drug.drugName,
+            System.currentTimeMillis()
+        ))
+
+        val directions = RxSearchFragmentDirections.navigateToDrugReport()
+        findNavController().navigate(directions)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        searchBox.text.clear()
     }
 }

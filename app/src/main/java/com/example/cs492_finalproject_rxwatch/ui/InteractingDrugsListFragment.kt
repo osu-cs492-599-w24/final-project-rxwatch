@@ -13,10 +13,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay
 import com.example.cs492_finalproject_rxwatch.data.Manufacturers
+import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewModel
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
 class InteractingDrugsListFragment : Fragment(R.layout.drug_report_fragment) {
     private val viewModel: DrugInformationViewModel by viewModels()
+    private val searchedDrugsViewModel: SearchedDrugViewModel by viewModels()
     private val adapter = DrugInteractionsAdapter(::onDrugInfoItemClick)
 
     private lateinit var searchResultsListRV: RecyclerView
@@ -45,85 +47,93 @@ class InteractingDrugsListFragment : Fragment(R.layout.drug_report_fragment) {
         * However, Retrofit appears to be URL encoding the `+` signs, so it gets double encoded.
         * Replacing the `+` signs with a space ` ` appears to fix the issue.
         * */
-        val exampleDrug = "hydrocodone"
-        val exampleQuery = "drug_interactions:$exampleDrug AND _exists_:openfda.generic_name"
-        viewModel.loadDrugInteractions(exampleQuery)
+        searchedDrugsViewModel.mostRecentSearchedDrug.observe(viewLifecycleOwner) { drug ->
+            val searchedDrug = drug[0].drugName
+            Log.d("InteractingDrugsListFragment", "Searched drug outside observe: $searchedDrug")
 
-        searchResultsListRV = view.findViewById(R.id.rv_search_results)
-        searchResultsListRV.layoutManager = LinearLayoutManager(requireContext())
-        searchResultsListRV.setHasFixedSize(true)
-        searchResultsListRV.adapter = adapter
+            val query = "drug_interactions:$searchedDrug AND _exists_:openfda.generic_name"
+            Log.d("InteractingDrugsListFragment", "Query: $query")
 
-        viewModel.searchResults.observe(viewLifecycleOwner) { drugInformationResults ->
-            if (drugInformationResults != null) {
+            viewModel.loadDrugInteractions(query)
 
-                drugsInfoView.visibility = View.VISIBLE
+            searchResultsListRV = view.findViewById(R.id.rv_search_results)
+            searchResultsListRV.layoutManager = LinearLayoutManager(requireContext())
+            searchResultsListRV.setHasFixedSize(true)
+            searchResultsListRV.adapter = adapter
 
-                Log.d("InteractingDrugsListFragment", "Search Results: $drugInformationResults")
-                Log.d("InteractingDrugsListFragment", "Search Results List of DrugInfo: ${drugInformationResults.results}")
+            viewModel.searchResults.observe(viewLifecycleOwner) { drugInformationResults ->
+                if (drugInformationResults != null) {
 
-                val drugInfoList = drugInformationResults.results
+                    drugsInfoView.visibility = View.VISIBLE
 
-                /*
-                * Build a map of the manufacturer (mfr) drug names to the drug interactions
-                * and nest it within a map of the generic drug names.
-                * This helps condense the search results, since many manufacturers make the same drug.
-                * */
-                val drugInteractionsMap = mutableMapOf<String, MutableMap<String, String>>()
+                    val drugInfoList = drugInformationResults.results
 
-                drugInfoList.forEach { drugInfo ->
-                    drugInfo.openFDA?.genericName?.forEach{ genericName ->
-                        val mfrToInteractionsMap = drugInteractionsMap.getOrPut(genericName) {
-                            mutableMapOf()
-                        }
-                        drugInfo.openFDA.manufacturerName?.forEach { mfrName ->
-                            val interactionsString = drugInfo.drugInteractionsString?.joinToString(
-                                separator = "; ")
-                                ?: "No interactions found"
-                            mfrToInteractionsMap[mfrName] = interactionsString
+                    /*
+                    * Build a map of the manufacturer (mfr) drug names to the drug interactions
+                    * and nest it within a map of the generic drug names.
+                    * This helps condense the search results, since many manufacturers make the same drug.
+                    * */
+                    val drugInteractionsMap = mutableMapOf<String, MutableMap<String, String>>()
+
+                    drugInfoList.forEach { drugInfo ->
+                        drugInfo.openFDA?.genericName?.forEach { genericName ->
+                            val mfrToInteractionsMap = drugInteractionsMap.getOrPut(genericName) {
+                                mutableMapOf()
+                            }
+                            drugInfo.openFDA.manufacturerName?.forEach { mfrName ->
+                                val interactionsString =
+                                    drugInfo.drugInteractionsString?.joinToString(
+                                        separator = "; "
+                                    )
+                                        ?: "No interactions found"
+                                mfrToInteractionsMap[mfrName] = interactionsString
+                            }
                         }
                     }
-                }
 
-                // ****** Logging logic for debugging and not necessary for app functionality ******
-                Log.d("InteractingDrugsListFragment", "drugInteractionsMap: $drugInteractionsMap")
-                var totalMfrCount = 0
-                drugInteractionsMap.forEach { (_, mfrMap) ->
-                    totalMfrCount += mfrMap.size
-                }
-                val genericCount = drugInteractionsMap.size
-                val avgMfrsPerGeneric = if (genericCount > 0 ) totalMfrCount.toDouble() / genericCount else 0.0
-                Log.d("InteractingDrugsListFragment", "Total Generic Names: $genericCount")
-                Log.d("InteractingDrugsListFragment", "Total Mfr Names: $totalMfrCount")
-                Log.d("InteractingDrugsListFragment", "Avg Mfr name per Generic Name: $avgMfrsPerGeneric")
-                // *********************************************************************************
-
-                // Convert the nested map into nested data classes
-                // so the adapter can more easily work with it
-                val displayList = drugInteractionsMap.map { (genericName, mfrMap) ->
-                    DrugInteractionsDisplay(
-                        genericName = genericName,
-                        manufacturerName = mfrMap.map { (mfrName, interactions) ->
-                            Manufacturers(mfrName, interactions)
-                        }
+                    // ****** Logging logic for debugging and not necessary for app functionality ******
+                    var totalMfrCount = 0
+                    drugInteractionsMap.forEach { (_, mfrMap) ->
+                        totalMfrCount += mfrMap.size
+                    }
+                    val genericCount = drugInteractionsMap.size
+                    val avgMfrsPerGeneric =
+                        if (genericCount > 0) totalMfrCount.toDouble() / genericCount else 0.0
+                    Log.d("InteractingDrugsListFragment", "Total Generic Names: $genericCount")
+                    Log.d("InteractingDrugsListFragment", "Total Mfr Names: $totalMfrCount")
+                    Log.d(
+                        "InteractingDrugsListFragment",
+                        "Avg Mfr name per Generic Name: $avgMfrsPerGeneric"
                     )
-                }
+                    // *********************************************************************************
 
-                // Send the new nested data classes to the adapter
-                adapter.updateDrugInteractionsList(displayList)
-
-                searchResultsListRV.visibility = View.VISIBLE
-                searchResultsListRV.scrollToPosition(0)
-
-                // Prep and share the list of drugs
-                shareButton.setOnClickListener {
-                    val shareText = buildDrugListShareString(exampleDrug, displayList)
-                    val intent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, shareText)
-                        type = "text/plain"
+                    // Convert the nested map into nested data classes
+                    // so the adapter can more easily work with it
+                    val displayList = drugInteractionsMap.map { (genericName, mfrMap) ->
+                        DrugInteractionsDisplay(
+                            genericName = genericName,
+                            manufacturerName = mfrMap.map { (mfrName, interactions) ->
+                                Manufacturers(mfrName, interactions)
+                            }
+                        )
                     }
-                    startActivity(Intent.createChooser(intent, null))
+
+                    // Send the new nested data classes to the adapter
+                    adapter.updateDrugInteractionsList(displayList)
+
+                    searchResultsListRV.visibility = View.VISIBLE
+                    searchResultsListRV.scrollToPosition(0)
+
+                    // Prep and share the list of drugs
+                    shareButton.setOnClickListener {
+                        val shareText = buildDrugListShareString(searchedDrug, displayList)
+                        val intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, shareText)
+                            type = "text/plain"
+                        }
+                        startActivity(Intent.createChooser(intent, null))
+                    }
                 }
             }
         }
@@ -141,17 +151,10 @@ class InteractingDrugsListFragment : Fragment(R.layout.drug_report_fragment) {
 
     }
 
-    // TODO Implement the onResume() method
-//    override fun onResume() {
-//        super.onResume()
-//
-//        val exampleDrug = "hydrocodone"
-//        val exampleQuery = "drug_interactions:$exampleDrug AND _exists_:openfda.generic_name"
-//        viewModel.loadDrugInteractions(exampleQuery)
-//    }
-
     private fun onDrugInfoItemClick(drugInfo: DrugInteractionsDisplay) {
         Log.d("InteractingDrugsListFragment", "Item clicked: $drugInfo")
+        Log.d("InteractingDrugsListFragment", "Clicked Drug Generic Name: ${drugInfo.genericName}")
+        Log.d("InteractingDrugsListFragment", "Clicked Drug Manufacturers: ${drugInfo.manufacturerName}")
     }
 
     /*

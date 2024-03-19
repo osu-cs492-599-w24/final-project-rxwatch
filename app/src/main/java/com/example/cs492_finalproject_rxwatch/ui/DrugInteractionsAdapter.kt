@@ -10,7 +10,7 @@ import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay
 
 class DrugInteractionsAdapter(
-    private val onDrugInfoItemClick: (DrugInteractionsDisplay) -> Unit // This DrugInformation will most likely have to change
+    private val onDrugInfoItemClick: (DrugInteractionsDisplay) -> Unit
 )
     : RecyclerView.Adapter<DrugInteractionsAdapter.DrugInteractionsViewHolder>() {
     private var interactingDrugsList = listOf<DrugInteractionsDisplay>()
@@ -49,7 +49,7 @@ class DrugInteractionsAdapter(
 
         init {
             itemView.setOnClickListener {
-//                currentDrugInfo?.let(onClick)     // TODO
+                currentDrugInfo?.let(onClick)
             }
         }
 

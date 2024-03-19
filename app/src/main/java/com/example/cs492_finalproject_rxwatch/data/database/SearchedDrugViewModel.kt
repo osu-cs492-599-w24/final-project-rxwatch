@@ -13,6 +13,8 @@ class SearchedDrugViewModel(application: Application) : AndroidViewModel(applica
 
     val searchedDrugs = repository.getAllSearchedDrugs().asLiveData()
 
+    val mostRecentSearchedDrug = repository.getMostRecentSearchedDrug().asLiveData()
+
     fun deleteDrugByName(name: String) {
         viewModelScope.launch {
             repository.deleteSearchedDrugByName(name)
