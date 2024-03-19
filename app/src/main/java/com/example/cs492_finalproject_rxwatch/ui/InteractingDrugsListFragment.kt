@@ -153,6 +153,8 @@ class InteractingDrugsListFragment : Fragment(R.layout.drug_report_fragment) {
 
     private fun onDrugInfoItemClick(drugInfo: DrugInteractionsDisplay) {
         Log.d("InteractingDrugsListFragment", "Item clicked: $drugInfo")
+        Log.d("InteractingDrugsListFragment", "Clicked Drug Generic Name: ${drugInfo.genericName}")
+        Log.d("InteractingDrugsListFragment", "Clicked Drug Manufacturers: ${drugInfo.manufacturerName}")
     }
 
     /*

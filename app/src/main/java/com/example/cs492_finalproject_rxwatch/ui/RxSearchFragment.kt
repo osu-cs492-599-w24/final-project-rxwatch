@@ -87,7 +87,5 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
             }
 
         ItemTouchHelper(itemTouchCallBack).attachToRecyclerView(searchedDrugList)
-
-        //TODO: Implement Search View Screen
     }
 }
