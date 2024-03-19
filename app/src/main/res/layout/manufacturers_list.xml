@@ -8,7 +8,7 @@
         android:id="@+id/tv_interacting_drug_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="List of <drugName> manufacturers that interact with <searchedDrugName>:"
+        android:text="@string/mfr_list_heading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
