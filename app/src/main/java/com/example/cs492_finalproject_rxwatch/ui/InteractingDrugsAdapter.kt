@@ -9,16 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay
 
-class DrugInteractionsAdapter(
+class InteractingDrugsAdapter(
     private val onDrugInfoItemClick: (DrugInteractionsDisplay) -> Unit
 )
-    : RecyclerView.Adapter<DrugInteractionsAdapter.DrugInteractionsViewHolder>() {
+    : RecyclerView.Adapter<InteractingDrugsAdapter.DrugInteractionsViewHolder>() {
     private var interactingDrugsList = listOf<DrugInteractionsDisplay>()
 
     fun updateDrugInteractionsList(newInteractingDrugsList: List<DrugInteractionsDisplay>?) {
         notifyItemRangeRemoved(0, interactingDrugsList.size)
         interactingDrugsList = newInteractingDrugsList ?: listOf()
-        Log.d("DrugInteractionsAdapter", "Updated Drug Interactions List: $interactingDrugsList")
+        Log.d("InteractingDrugsAdapter", "Updated Drug Interactions List: $interactingDrugsList")
         notifyItemRangeInserted(0, interactingDrugsList.size)
     }
 
@@ -29,7 +29,7 @@ class DrugInteractionsAdapter(
         viewType: Int
     ): DrugInteractionsViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.drug_interactions_list_item, parent, false)
+            .inflate(R.layout.interacting_drug_list_item, parent, false)
         return DrugInteractionsViewHolder(itemView, onDrugInfoItemClick)
     }
 
