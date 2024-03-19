@@ -16,4 +16,5 @@
     <string name="label_rx_search">RxWatch - Search</string>
     <string name="label_drug_report">RxWatch - Interacting Drugs</string>
     <string name="label_adverse_events">RxWatch - Adverse Events</string>
+    <string name="label_manufacturers_list">RxWatch - Manufacturers</string>
 </resources>

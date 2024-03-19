@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.TextView
 import com.example.cs492_finalproject_rxwatch.R
-import com.example.cs492_finalproject_rxwatch.data.Manufacturers
+import com.example.cs492_finalproject_rxwatch.data.Manufacturer
 
 class MfrDrugInteractionsAdapter(
     var context: Context,
-    private var manufacturers: MutableList<Manufacturers>
+    private var manufacturers: MutableList<Manufacturer>
 ) : BaseExpandableListAdapter() {
     override fun getGroupCount(): Int {
         return manufacturers.size
@@ -21,7 +21,7 @@ class MfrDrugInteractionsAdapter(
         return 1
     }
 
-    override fun getGroup(groupPosition: Int): Manufacturers {
+    override fun getGroup(groupPosition: Int): Manufacturer {
         return manufacturers[groupPosition]
     }
 

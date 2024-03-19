@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.fragment.findNavController
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay
-import com.example.cs492_finalproject_rxwatch.data.Manufacturers
+import com.example.cs492_finalproject_rxwatch.data.Manufacturer
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewModel
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
@@ -112,8 +112,8 @@ class InteractingDrugsListFragment : Fragment(R.layout.interactings_drugs_list_f
                     val displayList = drugInteractionsMap.map { (genericName, mfrMap) ->
                         DrugInteractionsDisplay(
                             genericName = genericName,
-                            manufacturerName = mfrMap.map { (mfrName, interactions) ->
-                                Manufacturers(mfrName, interactions)
+                            manufacturers = mfrMap.map { (mfrName, interactions) ->
+                                Manufacturer(mfrName, interactions)
                             }
                         )
                     }
@@ -154,7 +154,9 @@ class InteractingDrugsListFragment : Fragment(R.layout.interactings_drugs_list_f
     private fun onDrugInfoItemClick(drugInfo: DrugInteractionsDisplay) {
         Log.d("InteractingDrugsListFragment", "Item clicked: $drugInfo")
         Log.d("InteractingDrugsListFragment", "Clicked Drug Generic Name: ${drugInfo.genericName}")
-        Log.d("InteractingDrugsListFragment", "Clicked Drug Manufacturers: ${drugInfo.manufacturerName}")
+        Log.d("InteractingDrugsListFragment", "Clicked Drug Manufacturer: ${drugInfo.manufacturers}")
+        val directions = InteractingDrugsListFragmentDirections.navigateToManufacturersList(drugInfo)
+        findNavController().navigate(directions)
     }
 
     /*
