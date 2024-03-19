@@ -9,4 +9,6 @@ class SearchedDrugRepository(
     suspend fun deleteSearchedDrugByName(name: String) = dao.deleteDrugByName(name)
 
     fun getAllSearchedDrugs() = dao.getAllSearchedDrugs()
+
+    fun getMostRecentSearchedDrug() = dao.getMostRecentSearchedDrug()
 }

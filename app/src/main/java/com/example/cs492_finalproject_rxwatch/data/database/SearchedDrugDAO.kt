@@ -20,4 +20,7 @@ interface SearchedDrugDAO {
 
     @Query("SELECT * FROM SearchedDrug ORDER BY timestamp DESC")
     fun getAllSearchedDrugs(): Flow<List<SearchedDrug>>
+
+    @Query("SELECT * FROM SearchedDrug ORDER BY timestamp DESC LIMIT 1")
+    fun getMostRecentSearchedDrug(): Flow<List<SearchedDrug>>
 }
