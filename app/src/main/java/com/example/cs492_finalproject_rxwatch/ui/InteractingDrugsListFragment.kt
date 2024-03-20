@@ -73,21 +73,24 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
     private val searchedDrugsViewModel: SearchedDrugViewModel by viewModels()
     private val adapter = InteractingDrugsAdapter(::onDrugInfoItemClick)
 
-    // Set up the RecyclerView and buttons
+    // The RecyclerView that will display the list of drugs that interact with the searched drug
     private lateinit var searchResultsListRV: RecyclerView
 
-    // Set up the RecyclerView and buttons
+    // The title of the drug that was searched
+    private lateinit var drugNameTitle: TextView
+
+    // The button to navigate to the AdverseEventsFragment
     private lateinit var adverseButton: Button
     private lateinit var shareButton: Button
 
-    // Set up the RecyclerView and buttons
+    // The loading indicator to display when the search is loading
     private lateinit var loadingIndicator: CircularProgressIndicator
     private lateinit var drugsInfoView: View
 
-    // Set up the RecyclerView and buttons
+    // The text view to display error messages
     private lateinit var errorMessages: TextView
 
-    // Set up the RecyclerView and buttons
+    // The name of the drug that was searched
     private lateinit var searchedDrugName: String
 
     /**
@@ -107,6 +110,7 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
         super.onViewCreated(view, savedInstanceState)
 
         // Set up the RecyclerView and buttons
+        drugNameTitle = view.findViewById(R.id.drug_name_title)
         adverseButton = view.findViewById(R.id.btn_navigate_to_adverse)
         shareButton = view.findViewById(R.id.btn_share_interactions)
         loadingIndicator = view.findViewById(R.id.loading_indicator)
@@ -127,6 +131,7 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
         searchedDrugsViewModel.mostRecentSearchedDrug.observe(viewLifecycleOwner) { drug ->
             // Set up the RecyclerView and buttons
             searchedDrugName = drug[0].drugName // Get the name of the drug that was searched
+            drugNameTitle.text = searchedDrugName // Set the title of the drug that was searched
             Log.d("InteractingDrugsListFragment", "Searched drug outside observe: $searchedDrugName")
 
             val query = "drug_interactions:$searchedDrugName AND _exists_:openfda.generic_name" // Create the query to search for drug interactions
