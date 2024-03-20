@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +30,8 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
     private lateinit var loadingIndicator: CircularProgressIndicator
     private lateinit var drugsInfoView: View
 
+    private lateinit var errorMessages: TextView
+
     private lateinit var searchedDrugName: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,6 +41,7 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
         shareButton = view.findViewById(R.id.btn_share_interactions)
         loadingIndicator = view.findViewById(R.id.loading_indicator)
         drugsInfoView = view.findViewById(R.id.drugs_info)
+        errorMessages = view.findViewById(R.id.tv_error_message)
 
         adverseButton.setOnClickListener {
             val directions = InteractingDrugsListFragmentDirections.navigateToAdverseEvents()
@@ -148,6 +152,15 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
             }
             else {
                 loadingIndicator.visibility = View.INVISIBLE
+            }
+        }
+
+        //Set up observer for error status of API query
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            if (error != null) {
+                drugsInfoView.visibility = View.INVISIBLE
+                errorMessages.visibility = View.VISIBLE
+                errorMessages.text = getString(R.string.error_message, error)
             }
         }
 

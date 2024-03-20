@@ -20,6 +20,9 @@ class DrugInformationViewModel: ViewModel() {
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> = _loading
 
+    private val _error = MutableLiveData<String?>(null)
+    val error: LiveData<String?> = _error
+
     fun loadDrugInteractions(search: String) {
         Log.d("DrugInformationViewModel", "Search query: $search")
         viewModelScope.launch {
@@ -28,6 +31,7 @@ class DrugInformationViewModel: ViewModel() {
             _loading.value = false
             Log.d("DrugInformationViewModel", "Search Results: $result")
             _searchResults.value = result.getOrNull()
+            _error.value = result.exceptionOrNull()?.message
         }
     }
 }
