@@ -135,7 +135,7 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
         searchedDrugsViewModel.mostRecentSearchedDrug.observe(viewLifecycleOwner) { drug ->
             // Set up the RecyclerView and buttons
             searchedDrugName = drug[0].drugName // Get the name of the drug that was searched
-            drugNameTitle.text = searchedDrugName // Set the title of the drug that was searched
+            drugNameTitle.text = getString(R.string.search_results_title, searchedDrugName) // Set the title of the drug that was searched
             Log.d("InteractingDrugsListFragment", "Searched drug outside observe: $searchedDrugName")
 
             val query = "drug_interactions:$searchedDrugName AND _exists_:openfda.generic_name" // Create the query to search for drug interactions
