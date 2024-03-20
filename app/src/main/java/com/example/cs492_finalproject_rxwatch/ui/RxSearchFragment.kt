@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -21,7 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
 
 class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
-    private lateinit var searchButton: Button
+    private lateinit var searchButton: ImageButton
     private lateinit var searchBox: EditText
     private lateinit var searchedDrugList: RecyclerView
 
