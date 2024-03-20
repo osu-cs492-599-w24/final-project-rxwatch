@@ -25,15 +25,84 @@
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChart_view"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="400dp"
+            android:layout_marginVertical="30dp"
             app:layout_constraintTop_toBottomOf="@id/adverse_headline" />
 
-        <TextView
-            android:id="@+id/description"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Put some description here"
-            app:layout_constraintTop_toBottomOf="@id/pieChart_view"/>
+            android:orientation="vertical"
+            android:layout_marginVertical="20dp"
+            app:layout_constraintTop_toBottomOf="@id/pieChart_view">
+            
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="10dp">
+
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:background="#b48ead"
+                    android:layout_marginHorizontal="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="18sp"
+                    android:text="@string/hospital_legend_label" />
+                
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginVertical="10dp">
+
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:background="#5e81ac"
+                    android:layout_marginHorizontal="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="18sp"
+                    android:text="@string/death_legend_label"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:layout_marginVertical="10dp">
+
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center"
+                    android:background="#a3be8c"
+                    android:layout_marginHorizontal="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="18sp"
+                    android:text="@string/other_legend_label"/>
+
+            </LinearLayout>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
