@@ -7,6 +7,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.cs492_finalproject_rxwatch.R
+import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewModel
 import com.example.cs492_finalproject_rxwatch.utils.OutcomesEnum
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -15,15 +16,30 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
-
+/**
+ * A simple [Fragment] subclass.
+ * Use the [AdverseEventsFragment.newInstance] factory method to
+ * create an instance of this fragment.
+ *
+ * This fragment is responsible for displaying the adverse events
+ * for a given drug. It uses the OpenFDA API to get the data and
+ * displays it in a pie chart.
+ */
 class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
+    //View model for the adverse events fragment
     private val viewModel: AdverseEventsViewModel by viewModels()
 
+    //View model for the searched drug. Used to get the most recent searched drug to use in the API call
+    private val searchedDrugsViewModel: SearchedDrugViewModel by viewModels()
+
+    //Total number of outcomes for the drug
     private var totalOutcomes: Int = 0
     private var outcomeCount = mutableMapOf<String, Int>()
 
+    //Pie chart for displaying the data
     private lateinit var pieChart: PieChart
 
+    //Loading indicator for when the API call is being made
     private lateinit var loadingIndicator: CircularProgressIndicator
     private lateinit var adverseEventsView: View
 
@@ -143,9 +159,16 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
     override fun onResume() {
         super.onResume()
 
-        val exampleDrug = "ibuprofen"
+        searchedDrugsViewModel.mostRecentSearchedDrug.observe(viewLifecycleOwner) { drug ->
+            if (drug != null) {
+                val query = "patient.drug.openfda.generic_name:${drug[0].drugName}"
+                viewModel.loadReactionOutcomeCount(query)
+            }
+        }
 
-        val exampleQuery = "patient.drug.openfda.generic_name:$exampleDrug"
-        viewModel.loadReactionOutcomeCount(exampleQuery)
+//        val exampleDrug = "ibuprofen"
+//
+//        val exampleQuery = "patient.drug.openfda.generic_name:$exampleDrug"
+//        viewModel.loadReactionOutcomeCount(exampleQuery)
     }
 }
