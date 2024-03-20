@@ -10,7 +10,10 @@ import androidx.fragment.app.viewModels
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewModel
 import com.example.cs492_finalproject_rxwatch.utils.OutcomesEnum
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.Legend.LegendOrientation
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -34,7 +37,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
     private val searchedDrugsViewModel: SearchedDrugViewModel by viewModels()
 
     //Total number of outcomes for the drug
-    private var totalOutcomes: Int = 0
+    private var totalOutcomes: Float = 0f
     private var outcomeCount = mutableMapOf<String, Int>()
 
     //Pie chart for displaying the data
@@ -74,12 +77,11 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                 adverseHeadline.text = getString(R.string.adverse_headline, cachedDrugName)
 
                 //Set up the pie chart
-                val label = "Type"
                 val pieDataset: PieDataSet
                 val pieEntries = mutableListOf<PieEntry>()
                 val pieColors = mutableListOf<Int>()
 
-                totalOutcomes = 0
+                totalOutcomes = 0f
 
                 //Iterate through the data and store it in a map
                 outcomes.results.forEach { count ->
@@ -88,21 +90,17 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                     //Map the 6 values into the only 4 that we want using enum
                     when(count.term) {
                         //If the outcome is not recovered or resolved, recovering or resolving, or recovered or resolved
+                        OutcomesEnum.RECOVERED_WITH_LONG_TERM_ISSUES.value,
                         OutcomesEnum.NOT_RECOVERED_OR_RESOLVED.value,
-                        OutcomesEnum.RECOVERING_RESOLVING.value,
+                        OutcomesEnum.RECOVERING_RESOLVING.value ,
                         OutcomesEnum.RECOVERED_RESOLVED.value -> {
-                            //If the outcome is death, hospitilization, or long lasting effects
-                            if (outcomeCount.containsKey("Hospitilization")) {
-                                outcomeCount["Hospitilization"] =
-                                    outcomeCount["Hospitilization"]!! + count.count
+                            //If the outcome is death, hospitalization, or long lasting effects
+                            if (outcomeCount.containsKey("Hospitalization")) {
+                                outcomeCount["Hospitalization"] =
+                                    outcomeCount["Hospitalization"]!! + count.count
                             } else {
-                                outcomeCount["Hosipitilization"] = count.count
+                                outcomeCount["Hospitalization"] = count.count
                             }
-                        }
-
-                        //If the outcome is recovered or resolved with long term issues
-                        OutcomesEnum.RECOVERED_WITH_LONG_TERM_ISSUES.value -> {
-                            outcomeCount["Long Lasting Effects"] = count.count
                         }
 
                         //If the outcome is death
@@ -118,37 +116,43 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                 }
 
                 //add colors for pie chart
-                pieColors.add(Color.parseColor("#5e81ac"));
-                pieColors.add(Color.parseColor("#a3be8c"));
-                pieColors.add(Color.parseColor("#b48ead"));
-                pieColors.add(Color.parseColor("#ebcb8b"));
+                pieColors.add(Color.parseColor("#5e81ac"))
+                pieColors.add(Color.parseColor("#a3be8c"))
+                pieColors.add(Color.parseColor("#b48ead"))
+                pieColors.add(Color.parseColor("#ebcb8b"))
 
                 //populating pie chart with data with data we just stored in the
                 // outcomeCount map
-                outcomeCount.keys.forEach { key ->
-                    pieEntries.add(0, PieEntry(outcomeCount[key]?.toFloat() ?: 0f, key))
+                outcomeCount.forEach { (key, value) ->
+                    val percent: Float = (value / totalOutcomes) * 100
+
+                    pieEntries.add(0, PieEntry(percent, key))
                 }
 
                 //set data and colors
-                pieDataset = PieDataSet(pieEntries, label)
+                pieDataset = PieDataSet(pieEntries, "")
                 pieDataset.colors = pieColors
 
                 //create pie data with our data set and set
                 //other values
                 val pieData = PieData(pieDataset)
-                pieData.setDrawValues(true)
                 pieData.setValueTextSize(18f)
-                pieData.setValueFormatter(PercentFormatter())
+                pieData.setValueFormatter(PercentFormatter(pieChart))
 
                 //initialization and customization for pie chart
                 pieChart.data = pieData
+                pieChart.dragDecelerationFrictionCoef = 0.9f
+                pieChart.rotationAngle = 90f
+                pieChart.setHoleColor(Color.parseColor("#eceff4"))
+                pieChart.animateY(1400, Easing.EaseInOutQuad)
+                pieChart.setEntryLabelColor(Color.BLACK)
+
                 pieChart.setUsePercentValues(true)
                 pieChart.isRotationEnabled = true
-                pieChart.dragDecelerationFrictionCoef = 0.9f
-                pieChart.rotationAngle = 0f
-                pieChart.holeRadius = 0f
-                pieChart.transparentCircleRadius = 0f
+                pieChart.isHighlightPerTapEnabled = false
                 pieChart.description.isEnabled = false
+                pieChart.legend.isEnabled = false
+
                 pieChart.invalidate()
             }
         }
@@ -156,7 +160,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
         //Set up an observer for the error status of the API query
         viewModel.error.observe(viewLifecycleOwner) { error ->
             if (error != null) {
-                Log.e("AdverseEventsFragment", "Error fetching forecast: ${error.message}")
+                Log.e("AdverseEventsFragment", "Error fetching data: ${error.message}")
                 error.printStackTrace()
             }
         }
