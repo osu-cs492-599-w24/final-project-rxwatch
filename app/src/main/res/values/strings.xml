@@ -11,6 +11,7 @@
 
     <string name="mfr_list_heading">List of %1$s manufacturers that interact with %2$s:</string>
 
+    <string name="action_share">Share</string>
     <string name="share_text">DRUG: %1$s\n\nPOSSIBLE INTERACTIONS: %2$s</string>
 
     <string name="label_rx_search">RxWatch - Search</string>
