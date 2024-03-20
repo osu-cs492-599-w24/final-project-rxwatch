@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_interacting_drug_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mfr_list_heading"
+        android:textSize="18dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp" />
+
+    <ExpandableListView
+        android:id="@+id/elv_manufacturer_names"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_interacting_drug_header"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp" />
+
+</RelativeLayout>

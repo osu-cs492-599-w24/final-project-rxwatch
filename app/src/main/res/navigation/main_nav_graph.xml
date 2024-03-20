@@ -31,6 +31,23 @@
         <action
             android:id="@+id/navigate_to_adverse_events"
             app:destination="@id/adverse_events"/>
+
+        <action
+            android:id="@+id/navigate_to_manufacturers_list"
+            app:destination="@id/manufacturers_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/manufacturers_list"
+        android:name="com.example.cs492_finalproject_rxwatch.ui.ManufacturersListFragment"
+        android:label="@string/label_manufacturers_list">
+        <argument
+            android:name="druginfo"
+            app:argType="com.example.cs492_finalproject_rxwatch.data.DrugInteractionsDisplay" />
+        <argument
+            android:name="searched_drug_name"
+            app:argType="string" />
+
     </fragment>
 
 </navigation>
