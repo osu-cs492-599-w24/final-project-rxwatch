@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.cs492_finalproject_rxwatch.R
@@ -38,10 +39,14 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
     //Pie chart for displaying the data
     private lateinit var pieChart: PieChart
+    private lateinit var adverseHeadline: TextView
 
     //Loading indicator for when the API call is being made
     private lateinit var loadingIndicator: CircularProgressIndicator
     private lateinit var adverseEventsView: View
+
+    //Cached drug name for the most recent searched drug
+    private lateinit var cachedDrugName: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,6 +68,10 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                 adverseEventsView.visibility = View.VISIBLE
 
                 pieChart = view.findViewById(R.id.pieChart_view)
+
+                //Set up the headline for the adverse events
+                adverseHeadline = view.findViewById(R.id.adverse_headline)
+                adverseHeadline.text = getString(R.string.adverse_headline, cachedDrugName)
 
                 //Set up the pie chart
                 val label = "Type"
@@ -172,6 +181,8 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
         searchedDrugsViewModel.mostRecentSearchedDrug.observe(viewLifecycleOwner) { drug ->
             //If we have a drug then we can make the API call
             if (drug != null) {
+                //Cache the most recent searched drug
+                cachedDrugName = drug[0].drugName
                 //Make the API call using the most recent searched drug
                 val query = "patient.drug.openfda.generic_name:${drug[0].drugName}"
                 viewModel.loadReactionOutcomeCount(query)
