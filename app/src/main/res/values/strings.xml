@@ -17,4 +17,5 @@
     <string name="label_drug_report">RxWatch - Interacting Drugs</string>
     <string name="label_adverse_events">RxWatch - Adverse Events</string>
     <string name="label_manufacturers_list">RxWatch - Manufacturers</string>
+    <string name="error_message">"ERROR: %1$s"</string>
 </resources>
