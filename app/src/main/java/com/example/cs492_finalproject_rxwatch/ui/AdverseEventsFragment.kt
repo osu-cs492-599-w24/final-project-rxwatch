@@ -56,6 +56,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
          * and sets it up with the values we have stored.
          */
         viewModel.outcomeCounts.observe(viewLifecycleOwner) { outcomes ->
+            //If we have data then we can display it
             if (outcomes != null) {
                 Log.d("AdverseEventsFragment", outcomes.toString())
 
@@ -63,6 +64,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
                 pieChart = view.findViewById(R.id.pieChart_view)
 
+                //Set up the pie chart
                 val label = "Type"
                 val pieDataset: PieDataSet
                 val pieEntries = mutableListOf<PieEntry>()
@@ -70,14 +72,17 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
                 totalOutcomes = 0
 
+                //Iterate through the data and store it in a map
                 outcomes.results.forEach { count ->
                     totalOutcomes += count.count
 
                     //Map the 6 values into the only 4 that we want using enum
                     when(count.term) {
+                        //If the outcome is not recovered or resolved, recovering or resolving, or recovered or resolved
                         OutcomesEnum.NOT_RECOVERED_OR_RESOLVED.value,
                         OutcomesEnum.RECOVERING_RESOLVING.value,
                         OutcomesEnum.RECOVERED_RESOLVED.value -> {
+                            //If the outcome is death, hospitilization, or long lasting effects
                             if (outcomeCount.containsKey("Hospitilization")) {
                                 outcomeCount["Hospitilization"] =
                                     outcomeCount["Hospitilization"]!! + count.count
@@ -86,14 +91,17 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                             }
                         }
 
+                        //If the outcome is recovered or resolved with long term issues
                         OutcomesEnum.RECOVERED_WITH_LONG_TERM_ISSUES.value -> {
                             outcomeCount["Long Lasting Effects"] = count.count
                         }
 
+                        //If the outcome is death
                         OutcomesEnum.FATAL.value -> {
                             outcomeCount["Death"] = count.count
                         }
 
+                        //If the outcome is unknown
                         OutcomesEnum.UNKNOWN.value -> {
                             outcomeCount["Other"] = count.count
                         }
@@ -136,6 +144,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
             }
         }
 
+        //Set up an observer for the error status of the API query
         viewModel.error.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 Log.e("AdverseEventsFragment", "Error fetching forecast: ${error.message}")
@@ -159,16 +168,14 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
     override fun onResume() {
         super.onResume()
 
+        //Set up an observer for the most recent searched drug
         searchedDrugsViewModel.mostRecentSearchedDrug.observe(viewLifecycleOwner) { drug ->
+            //If we have a drug then we can make the API call
             if (drug != null) {
+                //Make the API call using the most recent searched drug
                 val query = "patient.drug.openfda.generic_name:${drug[0].drugName}"
                 viewModel.loadReactionOutcomeCount(query)
             }
         }
-
-//        val exampleDrug = "ibuprofen"
-//
-//        val exampleQuery = "patient.drug.openfda.generic_name:$exampleDrug"
-//        viewModel.loadReactionOutcomeCount(exampleQuery)
     }
 }
