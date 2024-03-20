@@ -37,7 +37,7 @@ class RxSearchFragment : Fragment(R.layout.rx_search_fragment) {
 
         searchButton.setOnClickListener {
             val directions = RxSearchFragmentDirections.navigateToDrugReport()
-            val query = searchBox.text.toString().lowercase(Locale.ROOT)
+            val query = searchBox.text.toString().lowercase(Locale.ROOT).trim()
             Log.d("RxSearchFragment", "Query from text entry: $query")
 
             if (!TextUtils.isEmpty(query)) {
