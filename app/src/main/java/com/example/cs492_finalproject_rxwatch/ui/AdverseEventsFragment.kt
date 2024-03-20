@@ -92,7 +92,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                         //If the outcome is not recovered or resolved, recovering or resolving, or recovered or resolved
                         OutcomesEnum.RECOVERED_WITH_LONG_TERM_ISSUES.value,
                         OutcomesEnum.NOT_RECOVERED_OR_RESOLVED.value,
-                        OutcomesEnum.RECOVERING_RESOLVING.value ,
+                        OutcomesEnum.RECOVERING_RESOLVING.value,
                         OutcomesEnum.RECOVERED_RESOLVED.value -> {
                             //If the outcome is death, hospitalization, or long lasting effects
                             if (outcomeCount.containsKey("Hospitalization")) {
@@ -119,7 +119,6 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                 pieColors.add(Color.parseColor("#5e81ac"))
                 pieColors.add(Color.parseColor("#a3be8c"))
                 pieColors.add(Color.parseColor("#b48ead"))
-                pieColors.add(Color.parseColor("#ebcb8b"))
 
                 //populating pie chart with data with data we just stored in the
                 // outcomeCount map
