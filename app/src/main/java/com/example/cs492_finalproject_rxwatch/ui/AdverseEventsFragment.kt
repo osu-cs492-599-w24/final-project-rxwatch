@@ -7,6 +7,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.cs492_finalproject_rxwatch.R
+import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewModel
 import com.example.cs492_finalproject_rxwatch.utils.OutcomesEnum
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -15,15 +16,30 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
-
+/**
+ * A simple [Fragment] subclass.
+ * Use the [AdverseEventsFragment.newInstance] factory method to
+ * create an instance of this fragment.
+ *
+ * This fragment is responsible for displaying the adverse events
+ * for a given drug. It uses the OpenFDA API to get the data and
+ * displays it in a pie chart.
+ */
 class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
+    //View model for the adverse events fragment
     private val viewModel: AdverseEventsViewModel by viewModels()
 
+    //View model for the searched drug. Used to get the most recent searched drug to use in the API call
+    private val searchedDrugsViewModel: SearchedDrugViewModel by viewModels()
+
+    //Total number of outcomes for the drug
     private var totalOutcomes: Int = 0
     private var outcomeCount = mutableMapOf<String, Int>()
 
+    //Pie chart for displaying the data
     private lateinit var pieChart: PieChart
 
+    //Loading indicator for when the API call is being made
     private lateinit var loadingIndicator: CircularProgressIndicator
     private lateinit var adverseEventsView: View
 
@@ -40,6 +56,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
          * and sets it up with the values we have stored.
          */
         viewModel.outcomeCounts.observe(viewLifecycleOwner) { outcomes ->
+            //If we have data then we can display it
             if (outcomes != null) {
                 Log.d("AdverseEventsFragment", outcomes.toString())
 
@@ -47,6 +64,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
                 pieChart = view.findViewById(R.id.pieChart_view)
 
+                //Set up the pie chart
                 val label = "Type"
                 val pieDataset: PieDataSet
                 val pieEntries = mutableListOf<PieEntry>()
@@ -54,14 +72,17 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
                 totalOutcomes = 0
 
+                //Iterate through the data and store it in a map
                 outcomes.results.forEach { count ->
                     totalOutcomes += count.count
 
                     //Map the 6 values into the only 4 that we want using enum
                     when(count.term) {
+                        //If the outcome is not recovered or resolved, recovering or resolving, or recovered or resolved
                         OutcomesEnum.NOT_RECOVERED_OR_RESOLVED.value,
                         OutcomesEnum.RECOVERING_RESOLVING.value,
                         OutcomesEnum.RECOVERED_RESOLVED.value -> {
+                            //If the outcome is death, hospitilization, or long lasting effects
                             if (outcomeCount.containsKey("Hospitilization")) {
                                 outcomeCount["Hospitilization"] =
                                     outcomeCount["Hospitilization"]!! + count.count
@@ -70,14 +91,17 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                             }
                         }
 
+                        //If the outcome is recovered or resolved with long term issues
                         OutcomesEnum.RECOVERED_WITH_LONG_TERM_ISSUES.value -> {
                             outcomeCount["Long Lasting Effects"] = count.count
                         }
 
+                        //If the outcome is death
                         OutcomesEnum.FATAL.value -> {
                             outcomeCount["Death"] = count.count
                         }
 
+                        //If the outcome is unknown
                         OutcomesEnum.UNKNOWN.value -> {
                             outcomeCount["Other"] = count.count
                         }
@@ -120,6 +144,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
             }
         }
 
+        //Set up an observer for the error status of the API query
         viewModel.error.observe(viewLifecycleOwner) { error ->
             if (error != null) {
                 Log.e("AdverseEventsFragment", "Error fetching forecast: ${error.message}")
@@ -143,9 +168,14 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
     override fun onResume() {
         super.onResume()
 
-        val exampleDrug = "ibuprofen"
-
-        val exampleQuery = "patient.drug.openfda.generic_name:$exampleDrug"
-        viewModel.loadReactionOutcomeCount(exampleQuery)
+        //Set up an observer for the most recent searched drug
+        searchedDrugsViewModel.mostRecentSearchedDrug.observe(viewLifecycleOwner) { drug ->
+            //If we have a drug then we can make the API call
+            if (drug != null) {
+                //Make the API call using the most recent searched drug
+                val query = "patient.drug.openfda.generic_name:${drug[0].drugName}"
+                viewModel.loadReactionOutcomeCount(query)
+            }
+        }
     }
 }
