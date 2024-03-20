@@ -68,7 +68,7 @@ class MfrDrugInteractionsAdapter(
         var convertedView = convertView
         if (convertedView == null) {
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            convertedView = inflater.inflate(R.layout.drug_interactions_list_item, null)
+            convertedView = inflater.inflate(R.layout.drug_interactions_detail_item, null)
         }
         var itemChild = convertedView!!.findViewById<TextView>(R.id.tv_drug_interactions)
         itemChild.text = getGroup(groupPosition).drugInteractions

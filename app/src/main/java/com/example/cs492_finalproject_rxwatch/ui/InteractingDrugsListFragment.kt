@@ -16,7 +16,7 @@ import com.example.cs492_finalproject_rxwatch.data.Manufacturer
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewModel
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
-class InteractingDrugsListFragment : Fragment(R.layout.interactings_drugs_list_fragment) {
+class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fragment) {
     private val viewModel: DrugInformationViewModel by viewModels()
     private val searchedDrugsViewModel: SearchedDrugViewModel by viewModels()
     private val adapter = InteractingDrugsAdapter(::onDrugInfoItemClick)
