@@ -26,6 +26,7 @@
         android:layout_gravity="end"
         android:paddingHorizontal="16dp"
         android:paddingVertical="32dp"
+        android:textSize="13sp"
         android:alpha="0.66"
         android:text="timestamp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />

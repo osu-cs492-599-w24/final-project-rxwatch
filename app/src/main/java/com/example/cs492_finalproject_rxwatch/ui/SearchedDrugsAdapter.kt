@@ -70,7 +70,7 @@ class SearchedDrugsAdapter(
             val oneHour: Long = 60 * oneMin
             val oneDay: Long = 24 * oneHour
             val oneMonth: Long = 30 * oneDay
-            val oneYear: Long = 365* oneDay
+            val oneYear: Long = 365 * oneDay
 
             val diffMin: Long = diff / oneMin
             val diffHours: Long = diff / oneHour
@@ -80,16 +80,16 @@ class SearchedDrugsAdapter(
 
             when {
                 diffYears > 0 -> {
-                    result = "$diffYears years ago"
+                    result = if(diffYears == 1L) "1 year ago" else "$diffYears years ago"
                 }
                 diffMonths > 0 -> {
-                    result = "$diffMonths months ago"
+                    result = if(diffMonths == 1L) "1 month ago" else "$diffMonths months ago"
                 }
                 diffDays > 0 -> {
-                    result = "$diffDays days ago"
+                    result = if(diffDays == 1L) "yesterday" else "$diffDays days ago"
                 }
                 diffHours > 0 -> {
-                    result = "$diffHours hours ago"
+                    result = if(diffHours == 1L) "1 hour ago" else "$diffHours hours ago"
                 }
                 diffMin > 0 -> {
                     result = "$diffMin min ago"
