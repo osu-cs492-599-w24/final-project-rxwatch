@@ -98,6 +98,8 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
     // The name of the drug that was searched
     private lateinit var searchedDrugName: String
 
+    private lateinit var displayListCache: List<DrugInteractionsDisplay>
+
     /**
      * Set up the fragment when the view is created
      *
@@ -120,6 +122,7 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
         loadingIndicator = view.findViewById(R.id.loading_indicator)
         drugsInfoView = view.findViewById(R.id.drugs_info)
         errorMessages = view.findViewById(R.id.tv_error_message)
+        displayListCache = listOf()
 
         // Set up the RecyclerView and buttons
         adverseButton.setOnClickListener {
@@ -237,34 +240,8 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
                     searchResultsListRV.visibility = View.VISIBLE
                     searchResultsListRV.scrollToPosition(0)
 
-                    val menuHost: MenuHost = requireActivity()
-                    menuHost.addMenuProvider(
-                        object : MenuProvider {
-                            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                                menuInflater.inflate(R.menu.interacting_drugs_list_menu, menu)
-                            }
+                    displayListCache = displayList
 
-                            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                                return when (menuItem.itemId) {
-                                    R.id.action_share -> {
-
-                                        // Prep and share the list of drugs
-                                        val shareText = buildDrugListShareString(searchedDrugName, displayList)
-                                        val intent = Intent().apply {
-                                            action = Intent.ACTION_SEND
-                                            putExtra(Intent.EXTRA_TEXT, shareText)
-                                            type = "text/plain"
-                                        }
-                                        startActivity(Intent.createChooser(intent, null))
-                                        true
-                                    }
-                                    else -> false
-                                }
-                            }
-                        },
-                        viewLifecycleOwner,
-                        Lifecycle.State.STARTED
-                    )
                 }
             }
         }
@@ -288,6 +265,39 @@ class InteractingDrugsListFragment : Fragment(R.layout.interacting_drugs_list_fr
                 errorMessages.text = getString(R.string.error_message, error)
             }
         }
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.interacting_drugs_list_menu, menu)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when (menuItem.itemId) {
+                        R.id.action_share -> {
+
+                            // Prep and share the list of drugs
+                            if(displayListCache.isNotEmpty()) {
+                                val shareText =
+                                    buildDrugListShareString(searchedDrugName, displayListCache)
+                                val intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, shareText)
+                                    type = "text/plain"
+                                }
+                                startActivity(Intent.createChooser(intent, null))
+
+                            }
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.STARTED
+        )
 
     }
 
