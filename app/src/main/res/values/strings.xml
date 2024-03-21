@@ -23,6 +23,7 @@
     <string name="label_manufacturers_list">RxWatch - Manufacturers</string>
     <string name="error_message">"ERROR: %1$s"</string>
 
+    <string name="chart_total_events">Total Events Reported:\n%1$s</string>
     <string name="other_legend_label">Other - Other Adverse Outcomes Not Hospitalised or Fatal</string>
     <string name="hospital_legend_label">Hospitalization - Hospitalization Due to Adverse Reactions</string>
     <string name="death_legend_label">Death - Fatal Outcomes Related to the Drug</string>
