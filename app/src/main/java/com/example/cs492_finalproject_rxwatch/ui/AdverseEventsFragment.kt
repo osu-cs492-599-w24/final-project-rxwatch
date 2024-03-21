@@ -72,10 +72,6 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
                 pieChart = view.findViewById(R.id.pieChart_view)
 
-                val hospView = view.findViewById<View>(R.id.legend_view_hospitalization)
-                val deathView = view.findViewById<View>(R.id.legend_view_death)
-                val otherView = view.findViewById<View>(R.id.legend_view_other)
-
                 //Set up the headline for the adverse events
                 adverseHeadline = view.findViewById(R.id.adverse_headline)
                 adverseHeadline.text = getString(R.string.adverse_headline, cachedDrugName)
