@@ -1,5 +1,6 @@
 package com.example.cs492_finalproject_rxwatch.ui
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +13,6 @@ import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrugViewMode
 import com.example.cs492_finalproject_rxwatch.utils.OutcomesEnum
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.Legend.LegendOrientation
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -51,6 +50,7 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
     //Cached drug name for the most recent searched drug
     private lateinit var cachedDrugName: String
 
+    @SuppressLint("ResourceType")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -116,9 +116,9 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                 }
 
                 //add colors for pie chart
-                pieColors.add(Color.parseColor("#5e81ac"))
-                pieColors.add(Color.parseColor("#b48ead"))
-                pieColors.add(Color.parseColor("#a3be8c"))
+                pieColors.add(Color.parseColor(getString(R.color.chart_hospitalization)))
+                pieColors.add(Color.parseColor(getString(R.color.chart_death)))
+                pieColors.add(Color.parseColor(getString(R.color.chart_other)))
 
                 //populating pie chart with data with data we just stored in the
                 // outcomeCount map

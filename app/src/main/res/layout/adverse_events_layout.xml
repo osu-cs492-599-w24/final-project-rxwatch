@@ -46,7 +46,7 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center"
-                    android:background="#b48ead"
+                    android:background="@color/chart_hospitalization"
                     android:layout_marginHorizontal="10dp" />
 
                 <TextView
@@ -68,7 +68,7 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center"
-                    android:background="#5e81ac"
+                    android:background="@color/chart_death"
                     android:layout_marginHorizontal="10dp"/>
 
                 <TextView
@@ -91,7 +91,7 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center"
-                    android:background="#a3be8c"
+                    android:background="@color/chart_other"
                     android:layout_marginHorizontal="10dp"/>
 
                 <TextView
