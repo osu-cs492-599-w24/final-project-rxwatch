@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="chart_hospitalization">#a3be8c</color>
+    <color name="chart_death">#5e81ac</color>
+    <color name="chart_other">#b48ead</color>
 </resources>
