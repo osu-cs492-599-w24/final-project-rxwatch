@@ -8,6 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs492_finalproject_rxwatch.R
 import com.example.cs492_finalproject_rxwatch.data.database.SearchedDrug
+import okhttp3.internal.http.HttpDate.format
+import java.util.Calendar
+import java.util.Date
 
 class SearchedDrugsAdapter(
     private val onRecentlySearchedDrugClicked: (SearchedDrug) -> Unit
@@ -41,6 +44,7 @@ class SearchedDrugsAdapter(
         onClick: (SearchedDrug) -> Unit
         ) : RecyclerView.ViewHolder(view) {
         private val drugTV: TextView = view.findViewById(R.id.tv_drug_name)
+        private val timestampTV: TextView = view.findViewById(R.id.tv_timestamp)
         private var currentSearchedDrug: SearchedDrug? = null
 
         init {
@@ -53,6 +57,52 @@ class SearchedDrugsAdapter(
         fun bind(searchedDrug: SearchedDrug) {
             currentSearchedDrug = searchedDrug
             drugTV.text = searchedDrug.drugName
+            timestampTV.text = calculateTime(searchedDrug.timestamp)
         }
+
+        private fun calculateTime(timestamp: Long): String{
+            val date = Date(timestamp)
+            var result = ""
+            val diff = Calendar.getInstance().time.time - date.time
+
+            val oneSec = 1000L
+            val oneMin: Long = 60 * oneSec
+            val oneHour: Long = 60 * oneMin
+            val oneDay: Long = 24 * oneHour
+            val oneMonth: Long = 30 * oneDay
+            val oneYear: Long = 365* oneDay
+
+            val diffMin: Long = diff / oneMin
+            val diffHours: Long = diff / oneHour
+            val diffDays: Long = diff / oneDay
+            val diffMonths: Long = diff / oneMonth
+            val diffYears: Long = diff / oneYear
+
+            when {
+                diffYears > 0 -> {
+                    result = "$diffYears years ago"
+                }
+                diffMonths > 0 -> {
+                    result = "$diffMonths months ago"
+                }
+                diffDays > 0 -> {
+                    result = "$diffDays days ago"
+                }
+                diffHours > 0 -> {
+                    result = "$diffHours hours ago"
+                }
+                diffMin > 0 -> {
+                    result = "$diffMin min ago"
+                }
+                else -> {
+                    result = "just now"
+                }
+
+            }
+
+            return result
+
+        }
+
     }
 }
