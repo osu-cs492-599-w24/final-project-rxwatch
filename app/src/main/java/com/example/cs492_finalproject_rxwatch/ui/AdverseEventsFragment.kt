@@ -142,7 +142,14 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
                 pieChart.data = pieData
                 pieChart.dragDecelerationFrictionCoef = 0.9f
                 pieChart.rotationAngle = 90f
+
                 pieChart.setHoleColor(Color.parseColor("#eceff4"))
+                pieChart.centerText = getString(
+                    R.string.chart_total_events,
+                    "%,d".format(totalOutcomes.toInt())
+                )
+                pieChart.setCenterTextSize(18f)
+
                 pieChart.animateY(1400, Easing.EaseInOutQuad)
                 pieChart.setEntryLabelColor(Color.BLACK)
 
