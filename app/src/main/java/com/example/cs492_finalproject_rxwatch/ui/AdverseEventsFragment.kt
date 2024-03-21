@@ -83,8 +83,9 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
                 totalOutcomes = 0f
 
+                val reorderedResults = outcomes.results.sortedByDescending { it.term }
                 //Iterate through the data and store it in a map
-                outcomes.results.forEach { count ->
+                reorderedResults.forEach { count ->
                     totalOutcomes += count.count
 
                     //Map the 6 values into the only 4 that we want using enum
