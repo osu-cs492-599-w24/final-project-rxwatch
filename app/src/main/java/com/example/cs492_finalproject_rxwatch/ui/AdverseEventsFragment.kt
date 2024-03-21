@@ -72,6 +72,10 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
                 pieChart = view.findViewById(R.id.pieChart_view)
 
+                val hospView = view.findViewById<View>(R.id.legend_view_hospitalization)
+                val deathView = view.findViewById<View>(R.id.legend_view_death)
+                val otherView = view.findViewById<View>(R.id.legend_view_other)
+
                 //Set up the headline for the adverse events
                 adverseHeadline = view.findViewById(R.id.adverse_headline)
                 adverseHeadline.text = getString(R.string.adverse_headline, cachedDrugName)
@@ -83,8 +87,9 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
                 totalOutcomes = 0f
 
+                val reorderedResults = outcomes.results.sortedByDescending { it.term }
                 //Iterate through the data and store it in a map
-                outcomes.results.forEach { count ->
+                reorderedResults.forEach { count ->
                     totalOutcomes += count.count
 
                     //Map the 6 values into the only 4 that we want using enum

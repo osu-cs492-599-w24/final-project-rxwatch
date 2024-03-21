@@ -43,6 +43,7 @@
                 android:layout_marginVertical="10dp">
 
                 <View
+                    android:id="@+id/legend_view_hospitalization"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center"
@@ -65,6 +66,7 @@
                 android:layout_marginVertical="10dp">
 
                 <View
+                    android:id="@+id/legend_view_death"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center"
@@ -88,6 +90,7 @@
                 android:layout_marginVertical="10dp">
 
                 <View
+                    android:id="@+id/legend_view_other"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center"
