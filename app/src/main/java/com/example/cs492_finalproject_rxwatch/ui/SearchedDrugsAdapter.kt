@@ -47,6 +47,14 @@ class SearchedDrugsAdapter(
         private val timestampTV: TextView = view.findViewById(R.id.tv_timestamp)
         private var currentSearchedDrug: SearchedDrug? = null
 
+        //private member variables for calculating the "x time ago" text
+        private val oneSec = 1000L
+        private val oneMin: Long = 60 * oneSec
+        private val oneHour: Long = 60 * oneMin
+        private val oneDay: Long = 24 * oneHour
+        private val oneMonth: Long = 30 * oneDay
+        private val oneYear: Long = 365 * oneDay
+
         init {
             itemView.setOnClickListener {
                 Log.d("SearchedDrugsViewHolder", "IT: $it")
@@ -62,15 +70,7 @@ class SearchedDrugsAdapter(
 
         private fun calculateTime(timestamp: Long): String{
             val date = Date(timestamp)
-            var result = ""
             val diff = Calendar.getInstance().time.time - date.time
-
-            val oneSec = 1000L
-            val oneMin: Long = 60 * oneSec
-            val oneHour: Long = 60 * oneMin
-            val oneDay: Long = 24 * oneHour
-            val oneMonth: Long = 30 * oneDay
-            val oneYear: Long = 365 * oneDay
 
             val diffMin: Long = diff / oneMin
             val diffHours: Long = diff / oneHour
@@ -80,28 +80,24 @@ class SearchedDrugsAdapter(
 
             when {
                 diffYears > 0 -> {
-                    result = if(diffYears == 1L) "1 year ago" else "$diffYears years ago"
+                    return if(diffYears == 1L) "1 year ago" else "$diffYears years ago"
                 }
                 diffMonths > 0 -> {
-                    result = if(diffMonths == 1L) "1 month ago" else "$diffMonths months ago"
+                    return if(diffMonths == 1L) "1 month ago" else "$diffMonths months ago"
                 }
                 diffDays > 0 -> {
-                    result = if(diffDays == 1L) "yesterday" else "$diffDays days ago"
+                    return if(diffDays == 1L) "yesterday" else "$diffDays days ago"
                 }
                 diffHours > 0 -> {
-                    result = if(diffHours == 1L) "1 hour ago" else "$diffHours hours ago"
+                    return if(diffHours == 1L) "1 hour ago" else "$diffHours hours ago"
                 }
                 diffMin > 0 -> {
-                    result = "$diffMin min ago"
+                    return "$diffMin min ago"
                 }
                 else -> {
-                    result = "just now"
+                    return "just now"
                 }
-
             }
-
-            return result
-
         }
 
     }
