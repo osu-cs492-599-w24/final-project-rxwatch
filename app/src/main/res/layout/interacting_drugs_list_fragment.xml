@@ -14,12 +14,13 @@
             android:id="@+id/drug_name_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/MaterialAlertDialog.Material3.Title.Text.CenterStacked"
             android:textSize="30sp"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="Title"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
         <Button
             android:id="@+id/btn_navigate_to_adverse"

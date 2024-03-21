@@ -9,9 +9,10 @@
     <string name="share_button">Share Interactions</string>
     <string name="adverse_headline">Outcomes of Drug Adverse Events For %1$s</string>
 
-    <string name="search_results_title">Interactions for \"%1$s\"</string>
+    <string name="search_results_title">Drugs that interact with \"%1$s\"</string>
 
-    <string name="mfr_list_heading">List of %1$s manufacturers that interact with %2$s:</string>
+    <string name="mfr_list_heading">Manufacturers of %1$s\n(Interacts with \"%2$s\")</string>
+    <string name="mfr_list_sub_heading">Click a manufacturer name to expand and view details of interactions</string>
 
     <string name="action_share">Share</string>
     <string name="share_text">DRUG: %1$s\n\nPOSSIBLE INTERACTIONS: %2$s</string>

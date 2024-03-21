@@ -11,7 +11,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/mfr_list_heading"
-        android:textSize="18dp"
+        android:textSize="24sp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp" />
+
+    <TextView
+        android:id="@+id/tv_interacting_drug_sub_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_interacting_drug_header"
+        android:text="@string/mfr_list_sub_heading"
+        android:textSize="18sp"
+        android:paddingTop="8dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp" />
 
@@ -19,7 +30,7 @@
         android:id="@+id/elv_manufacturer_names"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_interacting_drug_header"
+        android:layout_below="@id/tv_interacting_drug_sub_header"
         android:paddingStart="8dp"
         android:paddingEnd="8dp" />
 
