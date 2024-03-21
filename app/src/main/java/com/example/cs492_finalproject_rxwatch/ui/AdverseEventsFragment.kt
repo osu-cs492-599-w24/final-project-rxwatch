@@ -117,8 +117,8 @@ class AdverseEventsFragment : Fragment(R.layout.adverse_events_layout) {
 
                 //add colors for pie chart
                 pieColors.add(Color.parseColor("#5e81ac"))
-                pieColors.add(Color.parseColor("#a3be8c"))
                 pieColors.add(Color.parseColor("#b48ead"))
+                pieColors.add(Color.parseColor("#a3be8c"))
 
                 //populating pie chart with data with data we just stored in the
                 // outcomeCount map
